@@ -1,0 +1,79 @@
+{
+  "name": "hast-util-to-nlcst",
+  "version": "0.0.0",
+  "description": "Transform HAST to NLCST",
+  "license": "MIT",
+  "keywords": [
+    "hast",
+    "rehype",
+    "nlcst",
+    "retext",
+    "html",
+    "natural",
+    "language"
+  ],
+  "repository": "https://github.com/wooorm/hast-util-to-nlcst",
+  "bugs": "https://github.com/wooorm/hast-util-to-nlcst/issues",
+  "author": "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)",
+  "contributors": [
+    "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)"
+  ],
+  "files": [
+    "index.js"
+  ],
+  "dependencies": {
+    "hast-util-embedded": "^1.0.0",
+    "hast-util-is-element": "^1.0.0",
+    "hast-util-phrasing": "^1.0.0",
+    "hast-util-to-string": "^1.0.0",
+    "hast-util-whitespace": "^1.0.0",
+    "nlcst-to-string": "^2.0.0",
+    "unist-util-position": "^2.0.1",
+    "vfile-location": "^2.0.0"
+  },
+  "devDependencies": {
+    "browserify": "^13.0.1",
+    "esmangle": "^1.0.1",
+    "is-hidden": "^1.0.1",
+    "negate": "^1.0.0",
+    "nyc": "^8.3.0",
+    "parse-dutch": "^3.0.0",
+    "parse-english": "^3.0.0",
+    "parse-latin": "^3.1.1",
+    "rehype": "^3.0.0",
+    "remark-cli": "^2.0.0",
+    "remark-preset-wooorm": "^1.0.0",
+    "tape": "^4.0.0",
+    "vfile": "^2.0.0",
+    "xo": "^0.16.0"
+  },
+  "scripts": {
+    "build-md": "remark *.md --quiet --frail",
+    "build-bundle": "browserify index.js --bare -s hastUtilToNLCST > hast-util-to-nlcst.js",
+    "build-mangle": "esmangle hast-util-to-nlcst.js > hast-util-to-nlcst.min.js",
+    "build": "npm run build-md && npm run build-bundle && npm run build-mangle",
+    "lint": "xo",
+    "test-api": "node test/index.js",
+    "test-coverage": "nyc --reporter lcov tape test/index.js",
+    "test": "npm run build && npm run lint && npm run test-coverage"
+  },
+  "nyc": {
+    "check-coverage": true,
+    "lines": 100,
+    "functions": 100,
+    "branches": 100
+  },
+  "xo": {
+    "space": true,
+    "rules": {
+      "max-params": "off"
+    },
+    "ignores": [
+      "hast-util-to-nlcst.js"
+    ]
+  },
+  "remarkConfig": {
+    "output": true,
+    "presets": "wooorm"
+  }
+}
