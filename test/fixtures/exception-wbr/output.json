@@ -1,5 +1,5 @@
 {
-  "type": "root",
+  "type": "RootNode",
   "children": [
     {
       "type": "ParagraphNode",

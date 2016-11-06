@@ -85,7 +85,7 @@ function toNLCST(tree, file, Parser) {
   find(tree);
 
   return {
-    type: 'root',
+    type: 'RootNode',
     children: results,
     position: {
       start: location.toPosition(0),

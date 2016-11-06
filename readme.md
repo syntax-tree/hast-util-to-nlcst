@@ -42,7 +42,7 @@ console.log(inspect(toNLCST(tree, file, English)));
 Which, when running, yields:
 
 ```txt
-root[2] (1:1-6:1, 0-134)
+RootNode[2] (1:1-6:1, 0-134)
 ├─ ParagraphNode[3] (1:10-3:3, 9-24)
 │  ├─ WhiteSpaceNode: "\n  " (1:10-2:3, 9-12)
 │  ├─ SentenceNode[2] (2:3-2:12, 12-21)
