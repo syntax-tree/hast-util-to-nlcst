@@ -1,11 +1,3 @@
-/**
- * @author Titus Wormer
- * @copyright 2016 Titus Wormer
- * @license MIT
- * @module hast:to-nlcst
- * @fileoverview Test suite for `hast-util-to-nlcst`.
- */
-
 'use strict';
 
 /* Dependencies. */

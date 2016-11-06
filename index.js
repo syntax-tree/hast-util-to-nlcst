@@ -1,11 +1,3 @@
-/**
- * @author Titus Wormer
- * @copyright 2016 Titus Wormer
- * @license MIT
- * @module hast:to-nlcst
- * @fileoverview Transform HAST to NLCST.
- */
-
 'use strict';
 
 /* Dependencies. */
@@ -53,15 +45,7 @@ var FLOW_ACCEPTING = [
   'dialog'
 ];
 
-/**
- * Transform `tree` into `nlcst`.
- *
- * @param {Node} tree - HAST node.
- * @param {File} file - Virtual file.
- * @param {Parser|Function} Parser - (Instance of) NLCST
- *   parser.
- * @return {NLCSTNode} - NLCST.
- */
+/* Transform `tree` to `nlcst`. */
 function toNLCST(tree, file, Parser) {
   var parser;
   var location;
@@ -161,7 +145,7 @@ function toNLCST(tree, file, Parser) {
   function add(node) {
     var result = ('length' in node ? all : one)(node);
 
-    if (result.length) {
+    if (result.length !== 0) {
       results.push(parser.tokenizeParagraph(result));
     }
   }
