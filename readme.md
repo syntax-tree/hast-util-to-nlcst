@@ -90,13 +90,13 @@ into an [NLCST][nlcst] tree.
 
 <!-- Definitions -->
 
-[travis-badge]: https://img.shields.io/travis/wooorm/hast-util-to-nlcst.svg
+[travis-badge]: https://img.shields.io/travis/syntax-tree/hast-util-to-nlcst.svg
 
-[travis]: https://travis-ci.org/wooorm/hast-util-to-nlcst
+[travis]: https://travis-ci.org/syntax-tree/hast-util-to-nlcst
 
-[codecov-badge]: https://img.shields.io/codecov/c/github/wooorm/hast-util-to-nlcst.svg
+[codecov-badge]: https://img.shields.io/codecov/c/github/syntax-tree/hast-util-to-nlcst.svg
 
-[codecov]: https://codecov.io/github/wooorm/hast-util-to-nlcst
+[codecov]: https://codecov.io/github/syntax-tree/hast-util-to-nlcst
 
 [npm]: https://docs.npmjs.com/cli/install
 
@@ -104,13 +104,13 @@ into an [NLCST][nlcst] tree.
 
 [author]: http://wooorm.com
 
-[hast]: https://github.com/wooorm/hast
+[hast]: https://github.com/syntax-tree/hast
 
-[nlcst]: https://github.com/wooorm/nlcst
+[nlcst]: https://github.com/syntax-tree/nlcst
 
 [rehype-retext]: https://github.com/wooorm/rehype-retext
 
-[vfile]: https://github.com/wooorm/vfile
+[vfile]: https://github.com/vfile/vfile
 
 [english]: https://github.com/wooorm/parse-english
 
