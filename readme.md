@@ -110,13 +110,12 @@ into an [NLCST][nlcst] tree.
 
 ###### Parameters
 
-*   `node` ([`HASTNode`][hast]) — Syntax tree (with positional
-    information);
-*   `file` ([`VFile`][vfile]);
+*   `node` ([`HASTNode`][hast])
+    — Syntax tree (with positional information)
+*   `file` ([`VFile`][vfile])
 *   `parser` (`Function`)
-    — Constructor of an NLCST parser, such as
-    [**parse-english**][english], [**parse-dutch**][dutch],
-    or [**parse-latin**][latin].
+    — Constructor of an NLCST parser, such as [**parse-english**][english],
+    [**parse-dutch**][dutch], or [**parse-latin**][latin]
 
 ###### Returns
 
