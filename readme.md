@@ -4,6 +4,44 @@ Transform [HAST][] to [NLCST][].
 
 > **Note** You probably want to use [rehype-retext][].
 
+###### Implied sentences
+
+The algorithm supports implicit and explicit paragraphs, such as:
+
+```html
+<article>
+  An implicit sentence.
+  <h1>An explicit sentence.</h1>
+</article>
+```
+
+Overlapping paragraphs are also supported (see the tests or the HTML spec
+for more info).
+
+###### Ignored nodes
+
+Some elements are ignored and their content will not be present in NLCST:
+`<script>`, `<style>`, `<svg>`, `<math>`, `<del>`.
+
+To ignore other elements, add a `data-nlcst` attribute with a value of `ignore`:
+
+```html
+<p>This is <span data-nlcst="ignore">hidden</span>.</p>
+<p data-nlcst="ignore">Completely hidden.</p>
+```
+
+###### Source nodes
+
+`<code>` elements are mapped to [Source][] nodes in NLCST.
+
+To mark other elements as source, add a `data-nlcst` attribute with a value
+of `source`:
+
+```html
+<p>This is <span data-nlcst="source">marked as source</span>.</p>
+<p data-nlcst="source">Completely marked.</p>
+```
+
 ## Installation
 
 [npm][]:
@@ -117,3 +155,5 @@ into an [NLCST][nlcst] tree.
 [latin]: https://github.com/wooorm/parse-latin
 
 [dutch]: https://github.com/wooorm/parse-dutch
+
+[source]: https://github.com/syntax-tree/nlcst#source
