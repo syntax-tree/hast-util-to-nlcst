@@ -98,7 +98,7 @@ function toNLCST(tree, file, Parser) {
 
     if (node.type === 'root') {
       findAll(children);
-    } else if (is(node) && !is(node, IGNORE)) {
+    } else if (is(node) && !ignored(node)) {
       /* Explicit paragraph. */
       if (is(node, EXPLICIT)) {
         add(node);
@@ -199,10 +199,10 @@ function toNLCST(tree, file, Parser) {
     } else if (tagName === 'br') {
       change = true;
       replacement = [parser.tokenizeWhiteSpace('\n')];
-    } else if (SOURCE.indexOf(tagName) !== -1) {
+    } else if (sourced(node)) {
       change = true;
       replacement = [parser.tokenizeSource(textContent(node))];
-    } else if (type === 'root' || IGNORE.indexOf(tagName) === -1) {
+    } else if (type === 'root' || !ignored(node)) {
       replacement = all(node.children);
     } else {
       return;
@@ -268,4 +268,14 @@ function toNLCST(tree, file, Parser) {
 
     return nodes;
   }
+}
+
+function sourced(node) {
+  var props = node.properties;
+  return is(node) && (is(node, SOURCE) || props.dataNlcst === 'source');
+}
+
+function ignored(node) {
+  var props = node.properties;
+  return is(node) && (is(node, IGNORE) || props.dataNlcst === 'ignore');
 }
