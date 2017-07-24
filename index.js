@@ -1,6 +1,5 @@
 'use strict';
 
-/* Dependencies. */
 var vfileLocation = require('vfile-location');
 var toString = require('nlcst-to-string');
 var position = require('unist-util-position');
@@ -10,7 +9,6 @@ var whitespace = require('hast-util-whitespace');
 var textContent = require('hast-util-to-string');
 var is = require('hast-util-is-element');
 
-/* Expose. */
 module.exports = toNLCST;
 
 /* Elements representing source. */
@@ -66,10 +64,7 @@ function toNLCST(tree, file, Parser) {
     throw new Error('hast-util-to-nlcst expected parser');
   }
 
-  if (
-    !position.start(tree).line ||
-    !position.start(tree).column
-  ) {
+  if (!position.start(tree).line || !position.start(tree).column) {
     throw new Error('hast-util-to-nlcst expected position on nodes');
   }
 
