@@ -12,7 +12,7 @@
     "natural",
     "language"
   ],
-  "repository": "https://github.com/syntax-tree/hast-util-to-nlcst",
+  "repository": "syntax-tree/hast-util-to-nlcst",
   "bugs": "https://github.com/syntax-tree/hast-util-to-nlcst/issues",
   "author": "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)",
   "contributors": [
@@ -48,12 +48,12 @@
     "xo": "^0.18.0"
   },
   "scripts": {
-    "build-md": "remark *.md -qfo",
+    "build-md": "remark . -qfo",
     "build-bundle": "browserify index.js --bare -s hastUtilToNLCST > hast-util-to-nlcst.js",
     "build-mangle": "esmangle hast-util-to-nlcst.js > hast-util-to-nlcst.min.js",
     "build": "npm run build-md && npm run build-bundle && npm run build-mangle",
     "lint": "xo",
-    "test-api": "node test/index.js",
+    "test-api": "node test",
     "test-coverage": "nyc --reporter lcov tape test/index.js",
     "test": "npm run build && npm run lint && npm run test-coverage"
   },
