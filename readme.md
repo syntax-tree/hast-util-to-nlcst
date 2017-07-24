@@ -108,16 +108,22 @@ RootNode[2] (1:1-6:1, 0-134)
 Transform a [HAST][] syntax tree and corresponding [virtual file][vfile]
 into an [NLCST][nlcst] tree.
 
-###### Parameters
+##### Parameters
 
-*   `node` ([`HASTNode`][hast])
-    — Syntax tree (with positional information)
-*   `file` ([`VFile`][vfile])
-*   `parser` (`Function`)
-    — Constructor of an NLCST parser, such as [**parse-english**][english],
-    [**parse-dutch**][dutch], or [**parse-latin**][latin]
+###### `node`
 
-###### Returns
+Syntax tree with positional information ([`HASTNode`][hast]).
+
+###### `file`
+
+Virtual file ([`VFile`][vfile]).
+
+###### `parser`
+
+Constructor of an NLCST parser, such as [`parse-english`][english],
+[`parse-dutch`][dutch], or [`parse-latin`][latin] (`Function`).
+
+##### Returns
 
 [`NLCSTNode`][nlcst].
 
