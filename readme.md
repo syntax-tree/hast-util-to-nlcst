@@ -127,6 +127,14 @@ Constructor of an NLCST parser, such as [`parse-english`][english],
 
 [`NLCSTNode`][nlcst].
 
+## Contribute
+
+See [`contribute.md` in `syntax-tree/hast`][contribute] for ways to get
+started.
+
+This organisation has a [Code of Conduct][coc].  By interacting with this
+repository, organisation, or community you agree to abide by its terms.
+
 ## License
 
 [MIT][license] © [Titus Wormer][author]
@@ -162,3 +170,7 @@ Constructor of an NLCST parser, such as [`parse-english`][english],
 [dutch]: https://github.com/wooorm/parse-dutch
 
 [source]: https://github.com/syntax-tree/nlcst#source
+
+[contribute]: https://github.com/syntax-tree/hast/blob/master/contributing.md
+
+[coc]: https://github.com/syntax-tree/hast/blob/master/code-of-conduct.md
