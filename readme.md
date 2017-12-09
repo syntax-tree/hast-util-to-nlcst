@@ -159,7 +159,7 @@ repository, organisation, or community you agree to abide by its terms.
 
 [nlcst]: https://github.com/syntax-tree/nlcst
 
-[rehype-retext]: https://github.com/wooorm/rehype-retext
+[rehype-retext]: https://github.com/rehypejs/rehype-retext
 
 [vfile]: https://github.com/vfile/vfile
 
