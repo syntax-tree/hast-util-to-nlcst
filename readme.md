@@ -131,7 +131,7 @@ of `source`:
 
 ## Contribute
 
-See [`contribute.md` in `syntax-tree/hast`][contribute] for ways to get
+See [`contributing.md` in `syntax-tree/hast`][contributing] for ways to get
 started.
 
 This organisation has a [Code of Conduct][coc].  By interacting with this
@@ -173,6 +173,6 @@ repository, organisation, or community you agree to abide by its terms.
 
 [source]: https://github.com/syntax-tree/nlcst#source
 
-[contribute]: https://github.com/syntax-tree/hast/blob/master/contributing.md
+[contributing]: https://github.com/syntax-tree/hast/blob/master/contributing.md
 
 [coc]: https://github.com/syntax-tree/hast/blob/master/code-of-conduct.md
