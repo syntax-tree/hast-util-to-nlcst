@@ -5,3 +5,4 @@ coverage/
 node_modules/
 hast-util-to-nlcst.js
 hast-util-to-nlcst.min.js
+yarn.lock
