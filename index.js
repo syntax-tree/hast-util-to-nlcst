@@ -1,20 +1,20 @@
-'use strict';
+'use strict'
 
-var vfileLocation = require('vfile-location');
-var toString = require('nlcst-to-string');
-var position = require('unist-util-position');
-var phrasing = require('hast-util-phrasing');
-var embedded = require('hast-util-embedded');
-var whitespace = require('hast-util-whitespace');
-var textContent = require('hast-util-to-string');
-var is = require('hast-util-is-element');
+var vfileLocation = require('vfile-location')
+var toString = require('nlcst-to-string')
+var position = require('unist-util-position')
+var phrasing = require('hast-util-phrasing')
+var embedded = require('hast-util-embedded')
+var whitespace = require('hast-util-whitespace')
+var textContent = require('hast-util-to-string')
+var is = require('hast-util-is-element')
 
-module.exports = toNLCST;
+module.exports = toNLCST
 
 /* Elements representing source. */
-var SOURCE = ['code'];
-var IGNORE = ['script', 'style', 'svg', 'math', 'del'];
-var EXPLICIT = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+var SOURCE = ['code']
+var IGNORE = ['script', 'style', 'svg', 'math', 'del']
+var EXPLICIT = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
 
 /* Constants. */
 var FLOW_ACCEPTING = [
@@ -41,43 +41,43 @@ var FLOW_ACCEPTING = [
   'fieldset',
   'details',
   'dialog'
-];
+]
 
 /* Transform `tree` to `nlcst`. */
 function toNLCST(tree, file, Parser) {
-  var parser;
-  var location;
-  var results;
-  var doc;
+  var parser
+  var location
+  var results
+  var doc
 
   /* Warn for invalid parameters. */
   if (!tree || !tree.type) {
-    throw new Error('hast-util-to-nlcst expected node');
+    throw new Error('hast-util-to-nlcst expected node')
   }
 
   if (!file || !file.messages) {
-    throw new Error('hast-util-to-nlcst expected file');
+    throw new Error('hast-util-to-nlcst expected file')
   }
 
   /* Construct parser. */
   if (!Parser) {
-    throw new Error('hast-util-to-nlcst expected parser');
+    throw new Error('hast-util-to-nlcst expected parser')
   }
 
   if (!position.start(tree).line || !position.start(tree).column) {
-    throw new Error('hast-util-to-nlcst expected position on nodes');
+    throw new Error('hast-util-to-nlcst expected position on nodes')
   }
 
-  location = vfileLocation(file);
-  doc = String(file);
-  parser = 'parse' in Parser ? Parser : new Parser();
+  location = vfileLocation(file)
+  doc = String(file)
+  parser = 'parse' in Parser ? Parser : new Parser()
 
   /* Transform HAST into NLCST tokens, and pass these
    * into `parser.parse` to insert sentences, paragraphs
    * where needed. */
-  results = [];
+  results = []
 
-  find(tree);
+  find(tree)
 
   return {
     type: 'RootNode',
@@ -86,146 +86,146 @@ function toNLCST(tree, file, Parser) {
       start: location.toPosition(0),
       end: location.toPosition(doc.length)
     }
-  };
+  }
 
   function find(node) {
-    var children = node.children;
+    var children = node.children
 
     if (node.type === 'root') {
-      findAll(children);
+      findAll(children)
     } else if (is(node) && !ignored(node)) {
       /* Explicit paragraph. */
       if (is(node, EXPLICIT)) {
-        add(node);
-      /* Slightly simplified version of:
+        add(node)
+        /* Slightly simplified version of:
        * https://html.spec.whatwg.org/#paragraphs */
       } else if (is(node, FLOW_ACCEPTING)) {
-        implicit(flattenAll(children));
-      /* Dig deeper. */
+        implicit(flattenAll(children))
+        /* Dig deeper. */
       } else {
-        findAll(children);
+        findAll(children)
       }
     }
   }
 
   function findAll(children) {
-    var length = children.length;
-    var index = -1;
+    var length = children.length
+    var index = -1
 
     while (++index < length) {
-      find(children[index]);
+      find(children[index])
     }
   }
 
   function flatten(node) {
     if (is(node, ['a', 'ins', 'del', 'map'])) {
-      return flattenAll(node.children);
+      return flattenAll(node.children)
     }
 
-    return node;
+    return node
   }
 
   function flattenAll(children) {
-    var results = [];
-    var length = children.length;
-    var index = -1;
+    var results = []
+    var length = children.length
+    var index = -1
 
     while (++index < length) {
-      results = results.concat(flatten(children[index]));
+      results = results.concat(flatten(children[index]))
     }
 
-    return results;
+    return results
   }
 
   function add(node) {
-    var result = ('length' in node ? all : one)(node);
+    var result = ('length' in node ? all : one)(node)
 
     if (result.length !== 0) {
-      results.push(parser.tokenizeParagraph(result));
+      results.push(parser.tokenizeParagraph(result))
     }
   }
 
   function implicit(children) {
-    var length = children.length + 1;
-    var index = -1;
-    var viable = false;
-    var start = -1;
-    var child;
+    var length = children.length + 1
+    var index = -1
+    var viable = false
+    var start = -1
+    var child
 
     while (++index < length) {
-      child = children[index];
+      child = children[index]
 
       if (child && phrasing(child)) {
         if (start === -1) {
-          start = index;
+          start = index
         }
 
         if (!viable && !embedded(child) && !whitespace(child)) {
-          viable = true;
+          viable = true
         }
       } else if (child && start === -1) {
-        find(child);
+        find(child)
       } else {
-        (viable ? add : findAll)(children.slice(start, index));
+        ;(viable ? add : findAll)(children.slice(start, index))
 
         if (child) {
-          find(child);
+          find(child)
         }
 
-        viable = false;
-        start = -1;
+        viable = false
+        start = -1
       }
     }
   }
 
   /* Convert `node` (HAST) to NLCST. */
   function one(node) {
-    var type = node.type;
-    var tagName = type === 'element' ? node.tagName : null;
-    var change;
-    var replacement;
+    var type = node.type
+    var tagName = type === 'element' ? node.tagName : null
+    var change
+    var replacement
 
     if (type === 'text') {
-      change = true;
-      replacement = parser.tokenize(node.value);
+      change = true
+      replacement = parser.tokenize(node.value)
     } else if (tagName === 'wbr') {
-      change = true;
-      replacement = [parser.tokenizeWhiteSpace(' ')];
+      change = true
+      replacement = [parser.tokenizeWhiteSpace(' ')]
     } else if (tagName === 'br') {
-      change = true;
-      replacement = [parser.tokenizeWhiteSpace('\n')];
+      change = true
+      replacement = [parser.tokenizeWhiteSpace('\n')]
     } else if (sourced(node)) {
-      change = true;
-      replacement = [parser.tokenizeSource(textContent(node))];
+      change = true
+      replacement = [parser.tokenizeSource(textContent(node))]
     } else if (type === 'root' || !ignored(node)) {
-      replacement = all(node.children);
+      replacement = all(node.children)
     } else {
-      return;
+      return
     }
 
     if (!change) {
-      return replacement;
+      return replacement
     }
 
-    return patch(replacement, location, location.toOffset(position.start(node)));
+    return patch(replacement, location, location.toOffset(position.start(node)))
   }
 
   /* Convert all `children` (HAST) to NLCST. */
   function all(children) {
-    var length = children && children.length;
-    var index = -1;
-    var result = [];
-    var child;
+    var length = children && children.length
+    var index = -1
+    var result = []
+    var child
 
     while (++index < length) {
-      child = one(children[index]);
+      child = one(children[index])
 
       if (child) {
-        result = result.concat(child);
+        result = result.concat(child)
       }
     }
 
-    return result;
+    return result
   }
 
   /* Patch a position on each node in `nodes`.
@@ -236,41 +236,41 @@ function toNLCST(tree, file, Parser) {
    * starting and ending positions can be inferred from their
    * content. */
   function patch(nodes, location, offset) {
-    var length = nodes.length;
-    var index = -1;
-    var start = offset;
-    var children;
-    var node;
-    var end;
+    var length = nodes.length
+    var index = -1
+    var start = offset
+    var children
+    var node
+    var end
 
     while (++index < length) {
-      node = nodes[index];
-      children = node.children;
+      node = nodes[index]
+      children = node.children
 
       if (children) {
-        patch(children, location, start);
+        patch(children, location, start)
       }
 
-      end = start + toString(node).length;
+      end = start + toString(node).length
 
       node.position = {
         start: location.toPosition(start),
         end: location.toPosition(end)
-      };
+      }
 
-      start = end;
+      start = end
     }
 
-    return nodes;
+    return nodes
   }
 }
 
 function sourced(node) {
-  var props = node.properties;
-  return is(node) && (is(node, SOURCE) || props.dataNlcst === 'source');
+  var props = node.properties
+  return is(node) && (is(node, SOURCE) || props.dataNlcst === 'source')
 }
 
 function ignored(node) {
-  var props = node.properties;
-  return is(node) && (is(node, IGNORE) || props.dataNlcst === 'ignore');
+  var props = node.properties
+  return is(node) && (is(node, IGNORE) || props.dataNlcst === 'ignore')
 }
