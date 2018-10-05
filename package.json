@@ -35,7 +35,7 @@
     "browserify": "^16.0.0",
     "is-hidden": "^1.0.1",
     "negate": "^1.0.0",
-    "nyc": "^12.0.0",
+    "nyc": "^13.0.0",
     "parse-dutch": "^4.0.0",
     "parse-english": "^4.0.0",
     "parse-latin": "^4.0.0",
@@ -46,7 +46,7 @@
     "tape": "^4.0.0",
     "tinyify": "^2.4.3",
     "vfile": "^3.0.0",
-    "xo": "^0.21.0"
+    "xo": "^0.23.0"
   },
   "scripts": {
     "format": "remark . -qfo && prettier --write '**/*.js' && xo --fix",
