@@ -1,6 +1,6 @@
 {
   "name": "hast-util-to-nlcst",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Transform HAST to NLCST",
   "license": "MIT",
   "keywords": [
