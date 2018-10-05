@@ -165,6 +165,7 @@ function toNLCST(tree, file, Parser) {
         }
       } else if (child && start === -1) {
         find(child)
+        start = index + 1
       } else {
         ;(viable ? add : findAll)(children.slice(start, index))
 

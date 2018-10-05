@@ -12,13 +12,6 @@ var negate = require('negate')
 var hidden = require('is-hidden')
 var toNLCST = require('..')
 
-var read = fs.readFileSync
-var join = path.join
-
-var ROOT = join(__dirname, 'fixtures')
-
-var fixtures = fs.readdirSync(ROOT)
-
 test('hast-util-to-nlcst', function(t) {
   t.throws(
     function() {
@@ -146,17 +139,26 @@ test('hast-util-to-nlcst', function(t) {
 })
 
 test('Fixtures', function(t) {
-  fixtures.filter(negate(hidden)).forEach(function(fixture) {
-    var filepath = join(ROOT, fixture)
-    var input = vfile(read(join(filepath, 'input.html')))
-    var output = read(join(filepath, 'output.json'))
+  var root = path.join(__dirname, 'fixtures')
 
-    t.deepEqual(
-      toNLCST(rehype().parse(input), input, Latin),
-      JSON.parse(output),
-      'should work on `' + fixture + '`'
-    )
-  })
+  fs.readdirSync(root)
+    .filter(negate(hidden))
+    .forEach(function(fixture) {
+      var input = path.join(root, fixture, 'input.html')
+      var output = path.join(root, fixture, 'output.json')
+      var file = vfile(fs.readFileSync(input))
+      var actual = toNLCST(rehype().parse(file), file, Latin)
+      var expected
+
+      try {
+        expected = JSON.parse(fs.readFileSync(output))
+      } catch (error) {
+        fs.writeFileSync(output, JSON.stringify(actual, null, 2) + '\n')
+        return
+      }
+
+      t.deepEqual(actual, expected, 'should work on `' + fixture + '`')
+    })
 
   t.end()
 })
