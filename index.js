@@ -98,7 +98,7 @@ function toNLCST(tree, file, Parser) {
       if (is(node, EXPLICIT)) {
         add(node)
         /* Slightly simplified version of:
-       * https://html.spec.whatwg.org/#paragraphs */
+         * https://html.spec.whatwg.org/#paragraphs */
       } else if (is(node, FLOW_ACCEPTING)) {
         implicit(flattenAll(children))
         /* Dig deeper. */
