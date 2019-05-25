@@ -74,9 +74,6 @@
   "xo": {
     "prettier": true,
     "esnext": false,
-    "rules": {
-      "max-params": "off"
-    },
     "ignores": [
       "hast-util-to-nlcst.js"
     ]
