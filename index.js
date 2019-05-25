@@ -9,15 +9,13 @@ var whitespace = require('hast-util-whitespace')
 var textContent = require('hast-util-to-string')
 var is = require('hast-util-is-element')
 
-module.exports = toNLCST
+module.exports = toNlcst
 
-// Elements representing source.
-var SOURCE = ['code']
-var IGNORE = ['script', 'style', 'svg', 'math', 'del']
-var EXPLICIT = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+var source = ['code']
+var ignore = ['script', 'style', 'svg', 'math', 'del']
+var explicit = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
 
-// Constants.
-var FLOW_ACCEPTING = [
+var flowAccepting = [
   'body',
   'article',
   'section',
@@ -43,8 +41,8 @@ var FLOW_ACCEPTING = [
   'dialog'
 ]
 
-// Transform `tree` to `nlcst`.
-function toNLCST(tree, file, Parser) {
+// Transform `tree` to nlcst.
+function toNlcst(tree, file, Parser) {
   var parser
   var location
   var results
@@ -72,8 +70,8 @@ function toNLCST(tree, file, Parser) {
   doc = String(file)
   parser = 'parse' in Parser ? Parser : new Parser()
 
-  // Transform HAST into NLCST tokens, and pass these into `parser.parse` to
-  // insert sentences, paragraphs where needed.
+  // Transform hast to nlcst, and pass these into `parser.parse` to insert
+  // sentences, paragraphs where needed.
   results = []
 
   find(tree)
@@ -93,12 +91,11 @@ function toNLCST(tree, file, Parser) {
     if (node.type === 'root') {
       findAll(children)
     } else if (is(node) && !ignored(node)) {
-      if (is(node, EXPLICIT)) {
+      if (is(node, explicit)) {
         // Explicit paragraph.
         add(node)
-      } else if (is(node, FLOW_ACCEPTING)) {
-        // Slightly simplified version of:
-        // https://html.spec.whatwg.org/#paragraphs
+      } else if (is(node, flowAccepting)) {
+        // Slightly simplified version of: <https://html.spec.whatwg.org/#paragraphs>.
         implicit(flattenAll(children))
       } else {
         // Dig deeper.
@@ -210,7 +207,7 @@ function toNLCST(tree, file, Parser) {
     return patch(replacement, location, location.toOffset(position.start(node)))
   }
 
-  // Convert all `children` (HAST) to NLCST.
+  // Convert all `children` (hast) to nlcst.
   function all(children) {
     var length = children && children.length
     var index = -1
@@ -228,10 +225,10 @@ function toNLCST(tree, file, Parser) {
     return result
   }
 
-  // Patch a position on each node in `nodes`.  `offset` is the offset in
-  // `file` this run of content starts at.
+  // Patch a position on each node in `nodes`.
+  // `offset` is the offset in `file` this run of content starts at.
   //
-  // Note that NLCST nodes are concrete, meaning that their starting and ending
+  // Note that nlcst nodes are concrete, meaning that their starting and ending
   // positions can be inferred from their content.
   function patch(nodes, location, offset) {
     var length = nodes.length
@@ -265,10 +262,10 @@ function toNLCST(tree, file, Parser) {
 
 function sourced(node) {
   var props = node.properties
-  return is(node) && (is(node, SOURCE) || props.dataNlcst === 'source')
+  return is(node) && (is(node, source) || props.dataNlcst === 'source')
 }
 
 function ignored(node) {
   var props = node.properties
-  return is(node) && (is(node, IGNORE) || props.dataNlcst === 'ignore')
+  return is(node) && (is(node, ignore) || props.dataNlcst === 'ignore')
 }

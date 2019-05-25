@@ -1,7 +1,7 @@
 {
   "name": "hast-util-to-nlcst",
   "version": "1.2.4",
-  "description": "Transform HAST to NLCST",
+  "description": "Transform hast to nlcst",
   "license": "MIT",
   "keywords": [
     "hast",
@@ -50,8 +50,8 @@
   },
   "scripts": {
     "format": "remark . -qfo && prettier --write \"**/*.js\" && xo --fix",
-    "build-bundle": "browserify . -s hastUtilToNLCST > hast-util-to-nlcst.js",
-    "build-mangle": "browserify . -s hastUtilToNLCST -p tinyify > hast-util-to-nlcst.min.js",
+    "build-bundle": "browserify . -s hastUtilToNlcst > hast-util-to-nlcst.js",
+    "build-mangle": "browserify . -s hastUtilToNlcst -p tinyify > hast-util-to-nlcst.min.js",
     "build": "npm run build-bundle && npm run build-mangle",
     "test-api": "node test",
     "test-coverage": "nyc --reporter lcov tape test/index.js",

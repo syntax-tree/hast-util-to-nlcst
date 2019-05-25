@@ -10,28 +10,28 @@ var Dutch = require('parse-dutch')
 var English = require('parse-english')
 var negate = require('negate')
 var hidden = require('is-hidden')
-var toNLCST = require('..')
+var toNlcst = require('..')
 
 test('hast-util-to-nlcst', function(t) {
   t.throws(
     function() {
-      toNLCST()
+      toNlcst()
     },
     /hast-util-to-nlcst expected node/,
-    'should fail when not given an AST'
+    'should fail when not given a tree'
   )
 
   t.throws(
     function() {
-      toNLCST({})
+      toNlcst({})
     },
     /hast-util-to-nlcst expected node/,
-    'should fail when not given an AST (#2)'
+    'should fail when not given a tree (#2)'
   )
 
   t.throws(
     function() {
-      toNLCST({type: 'foo'})
+      toNlcst({type: 'foo'})
     },
     /hast-util-to-nlcst expected file/,
     'should fail when not given a file'
@@ -39,7 +39,7 @@ test('hast-util-to-nlcst', function(t) {
 
   t.throws(
     function() {
-      toNLCST({type: 'foo'})
+      toNlcst({type: 'foo'})
     },
     /hast-util-to-nlcst expected file/,
     'should fail when not given a file (#2)'
@@ -47,7 +47,7 @@ test('hast-util-to-nlcst', function(t) {
 
   t.throws(
     function() {
-      toNLCST({type: 'text', value: 'foo'}, {foo: 'bar'})
+      toNlcst({type: 'text', value: 'foo'}, {foo: 'bar'})
     },
     /hast-util-to-nlcst expected file/,
     'should fail when not given a file (#3)'
@@ -55,7 +55,7 @@ test('hast-util-to-nlcst', function(t) {
 
   t.throws(
     function() {
-      toNLCST({type: 'text', value: 'foo'}, vfile('foo'))
+      toNlcst({type: 'text', value: 'foo'}, vfile('foo'))
     },
     /hast-util-to-nlcst expected parser/,
     'should fail without parser'
@@ -63,14 +63,14 @@ test('hast-util-to-nlcst', function(t) {
 
   t.throws(
     function() {
-      toNLCST({type: 'text', value: 'foo'}, vfile(), Latin)
+      toNlcst({type: 'text', value: 'foo'}, vfile(), Latin)
     },
     /hast-util-to-nlcst expected position on nodes/,
     'should fail when not given positional information'
   )
 
   t.doesNotThrow(function() {
-    toNLCST(
+    toNlcst(
       {
         type: 'text',
         value: 'foo',
@@ -85,7 +85,7 @@ test('hast-util-to-nlcst', function(t) {
   }, 'should accept a parser constructor')
 
   t.doesNotThrow(function() {
-    toNLCST(
+    toNlcst(
       {
         type: 'text',
         value: 'foo',
@@ -101,7 +101,7 @@ test('hast-util-to-nlcst', function(t) {
 
   t.throws(
     function() {
-      toNLCST(
+      toNlcst(
         {
           type: 'text',
           value: 'foo',
@@ -116,7 +116,7 @@ test('hast-util-to-nlcst', function(t) {
   )
 
   t.test('should accept nodes without offsets', function(st) {
-    var node = toNLCST(
+    var node = toNlcst(
       {
         type: 'text',
         value: 'foo',
@@ -147,7 +147,7 @@ test('Fixtures', function(t) {
       var input = path.join(root, fixture, 'input.html')
       var output = path.join(root, fixture, 'output.json')
       var file = vfile(fs.readFileSync(input))
-      var actual = toNLCST(rehype().parse(file), file, Latin)
+      var actual = toNlcst(rehype().parse(file), file, Latin)
       var expected
 
       try {

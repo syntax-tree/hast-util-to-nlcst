@@ -39,12 +39,12 @@ var rehype = require('rehype')
 var vfile = require('to-vfile')
 var English = require('parse-english')
 var inspect = require('unist-util-inspect')
-var toNLCST = require('hast-util-to-nlcst')
+var toNlcst = require('hast-util-to-nlcst')
 
 var file = vfile.readSync('example.html')
 var tree = rehype().parse(file)
 
-console.log(inspect(toNLCST(tree, file, English)))
+console.log(inspect(toNlcst(tree, file, English)))
 ```
 
 Which, when running, yields:
