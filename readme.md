@@ -1,14 +1,22 @@
-# hast-util-to-nlcst [![Build][build-badge]][build] [![Coverage][coverage-badge]][coverage] [![Downloads][downloads-badge]][downloads] [![Chat][chat-badge]][chat]
+# hast-util-to-nlcst
 
-Transform [HAST][] to [NLCST][].
+[![Build][build-badge]][build]
+[![Coverage][coverage-badge]][coverage]
+[![Downloads][downloads-badge]][downloads]
+[![Size][size-badge]][size]
+[![Sponsors][sponsors-badge]][collective]
+[![Backers][backers-badge]][collective]
+[![Chat][chat-badge]][chat]
 
-> **Note**: You probably want to use [rehype-retext][].
+[**hast**][hast] utility to transform to [**nlcst**][nlcst].
 
-## Installation
+> **Note**: You probably want to use [`rehype-retext`][rehype-retext].
+
+## Install
 
 [npm][]:
 
-```bash
+```sh
 npm install hast-util-to-nlcst
 ```
 
@@ -24,9 +32,9 @@ Say we have the following `example.html`:
 </article>
 ```
 
-...and next to it, `index.js`:
+…and next to it, `index.js`:
 
-```javascript
+```js
 var rehype = require('rehype')
 var vfile = require('to-vfile')
 var English = require('parse-english')
@@ -65,50 +73,45 @@ RootNode[2] (1:1-6:1, 0-134)
 
 ## API
 
-### `toNLCST(node, file, Parser)`
+### `toNlcst(tree, file, Parser)`
 
-Transform a [HAST][] syntax tree and corresponding [virtual file][vfile]
-into an [NLCST][nlcst] tree.
+Transform the given [**hast**][hast] [*tree*][tree] to [**nlcst**][nlcst].
 
 ##### Parameters
 
-###### `node`
-
-Syntax tree with positional information ([`HASTNode`][hast]).
-
-###### `file`
-
-Virtual file ([`VFile`][vfile]).
-
-###### `parser`
-
-Constructor of an NLCST parser, such as [`parse-english`][english],
-[`parse-dutch`][dutch], or [`parse-latin`][latin] (`Function`).
+*   `tree` ([`HastNode`][hast-node])
+    — [*Tree*][tree] with [positional info][positional-information]
+    ([`HastNode`][hast-node])
+*   `file` ([`VFile`][vfile])
+    — Virtual file
+*   `parser` (`Function`)
+    — [**nlcst**][nlcst] parser, such as [`parse-english`][english],
+    [`parse-dutch`][dutch], or [`parse-latin`][latin]
 
 ##### Returns
 
-[`NLCSTNode`][nlcst].
+[`NlcstNode`][nlcst-node].
 
 ##### Notes
 
-###### Implied sentences
+###### Implied paragraphs
 
 The algorithm supports implicit and explicit paragraphs, such as:
 
 ```html
 <article>
-  An implicit sentence.
-  <h1>An explicit sentence.</h1>
+  An implicit paragraph.
+  <h1>An explicit paragraph.</h1>
 </article>
 ```
 
-Overlapping paragraphs are also supported (see the tests or the HTML spec
-for more info).
+Overlapping paragraphs are also supported (see the tests or the HTML spec for
+more info).
 
 ###### Ignored nodes
 
-Some elements are ignored and their content will not be present in NLCST:
-`<script>`, `<style>`, `<svg>`, `<math>`, `<del>`.
+Some elements are ignored and their content will not be present in
+[**nlcst**][nlcst]: `<script>`, `<style>`, `<svg>`, `<math>`, `<del>`.
 
 To ignore other elements, add a `data-nlcst` attribute with a value of `ignore`:
 
@@ -119,7 +122,7 @@ To ignore other elements, add a `data-nlcst` attribute with a value of `ignore`:
 
 ###### Source nodes
 
-`<code>` elements are mapped to [Source][] nodes in NLCST.
+`<code>` elements are mapped to [`Source`][source] nodes in [**nlcst**][nlcst].
 
 To mark other elements as source, add a `data-nlcst` attribute with a value
 of `source`:
@@ -131,11 +134,13 @@ of `source`:
 
 ## Contribute
 
-See [`contributing.md` in `syntax-tree/hast`][contributing] for ways to get
+See [`contributing.md` in `syntax-tree/.github`][contributing] for ways to get
 started.
+See [`support.md`][support] for ways to get help.
 
-This organisation has a [Code of Conduct][coc].  By interacting with this
-repository, organisation, or community you agree to abide by its terms.
+This project has a [Code of Conduct][coc].
+By interacting with this repository, organisation, or community you agree to
+abide by its terms.
 
 ## License
 
@@ -155,9 +160,19 @@ repository, organisation, or community you agree to abide by its terms.
 
 [downloads]: https://www.npmjs.com/package/hast-util-to-nlcst
 
+[size-badge]: https://img.shields.io/bundlephobia/minzip/hast-util-to-nlcst.svg
+
+[size]: https://bundlephobia.com/result?p=hast-util-to-nlcst
+
+[sponsors-badge]: https://opencollective.com/unified/sponsors/badge.svg
+
+[backers-badge]: https://opencollective.com/unified/backers/badge.svg
+
+[collective]: https://opencollective.com/unified
+
 [chat-badge]: https://img.shields.io/badge/join%20the%20community-on%20spectrum-7b16ff.svg
 
-[chat]: https://spectrum.chat/unified/rehype
+[chat]: https://spectrum.chat/unified/syntax-tree
 
 [npm]: https://docs.npmjs.com/cli/install
 
@@ -165,13 +180,11 @@ repository, organisation, or community you agree to abide by its terms.
 
 [author]: https://wooorm.com
 
-[hast]: https://github.com/syntax-tree/hast
+[contributing]: https://github.com/syntax-tree/.github/blob/master/contributing.md
 
-[nlcst]: https://github.com/syntax-tree/nlcst
+[support]: https://github.com/syntax-tree/.github/blob/master/support.md
 
-[rehype-retext]: https://github.com/rehypejs/rehype-retext
-
-[vfile]: https://github.com/vfile/vfile
+[coc]: https://github.com/syntax-tree/.github/blob/master/code-of-conduct.md
 
 [english]: https://github.com/wooorm/parse-english
 
@@ -179,8 +192,20 @@ repository, organisation, or community you agree to abide by its terms.
 
 [dutch]: https://github.com/wooorm/parse-dutch
 
+[rehype-retext]: https://github.com/rehypejs/rehype-retext
+
+[tree]: https://github.com/syntax-tree/unist#tree
+
+[positional-information]: https://github.com/syntax-tree/unist#positional-information
+
+[hast]: https://github.com/syntax-tree/hast
+
+[hast-node]: https://github.com/syntax-tree/hast#nodes
+
+[nlcst]: https://github.com/syntax-tree/nlcst
+
+[nlcst-node]: https://github.com/syntax-tree/nlcst#nodes
+
+[vfile]: https://github.com/vfile/vfile
+
 [source]: https://github.com/syntax-tree/nlcst#source
-
-[contributing]: https://github.com/syntax-tree/hast/blob/master/contributing.md
-
-[coc]: https://github.com/syntax-tree/hast/blob/master/code-of-conduct.md
