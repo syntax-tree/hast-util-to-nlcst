@@ -132,6 +132,11 @@ of `source`:
 <p data-nlcst="source">Completely marked.</p>
 ```
 
+## Security
+
+`hast-util-to-nlcst` does not change the original syntax tree so there are no
+openings for [cross-site scripting (XSS)][xss] attacks.
+
 ## Contribute
 
 See [`contributing.md` in `syntax-tree/.github`][contributing] for ways to get
@@ -209,3 +214,5 @@ abide by its terms.
 [vfile]: https://github.com/vfile/vfile
 
 [source]: https://github.com/syntax-tree/nlcst#source
+
+[xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
