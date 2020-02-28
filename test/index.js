@@ -152,7 +152,7 @@ test('Fixtures', function(t) {
 
       try {
         expected = JSON.parse(fs.readFileSync(output))
-      } catch (error) {
+      } catch (_) {
         fs.writeFileSync(output, JSON.stringify(actual, null, 2) + '\n')
         return
       }
