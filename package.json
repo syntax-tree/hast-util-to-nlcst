@@ -1,13 +1,17 @@
 {
   "name": "hast-util-to-nlcst",
   "version": "1.2.6",
-  "description": "Transform hast to nlcst",
+  "description": "hast utility to transform to nlcst",
   "license": "MIT",
   "keywords": [
+    "unist",
     "hast",
+    "hast-util",
+    "util",
+    "utility",
     "rehype",
-    "nlcst",
     "retext",
+    "nlcst",
     "html",
     "natural",
     "language"
