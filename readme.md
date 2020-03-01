@@ -137,6 +137,19 @@ of `source`:
 `hast-util-to-nlcst` does not change the original syntax tree so there are no
 openings for [cross-site scripting (XSS)][xss] attacks.
 
+## Related
+
+*   [`mdast-util-to-nlcst`](https://github.com/syntax-tree/mdast-util-to-nlcst)
+    — transform mdast to nlcst
+*   [`mdast-util-to-hast`](https://github.com/syntax-tree/mdast-util-to-hast)
+    — transform mdast to hast
+*   [`hast-util-to-mdast`](https://github.com/syntax-tree/hast-util-to-mdast)
+    — transform hast to mdast
+*   [`hast-util-to-xast`](https://github.com/syntax-tree/hast-util-to-xast)
+    — transform hast to xast
+*   [`hast-util-sanitize`](https://github.com/syntax-tree/hast-util-sanitize)
+    — sanitize hast nodes
+
 ## Contribute
 
 See [`contributing.md` in `syntax-tree/.github`][contributing] for ways to get
