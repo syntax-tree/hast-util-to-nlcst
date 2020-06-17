@@ -12,9 +12,9 @@ var negate = require('negate')
 var hidden = require('is-hidden')
 var toNlcst = require('..')
 
-test('hast-util-to-nlcst', function(t) {
+test('hast-util-to-nlcst', function (t) {
   t.throws(
-    function() {
+    function () {
       toNlcst()
     },
     /hast-util-to-nlcst expected node/,
@@ -22,7 +22,7 @@ test('hast-util-to-nlcst', function(t) {
   )
 
   t.throws(
-    function() {
+    function () {
       toNlcst({})
     },
     /hast-util-to-nlcst expected node/,
@@ -30,7 +30,7 @@ test('hast-util-to-nlcst', function(t) {
   )
 
   t.throws(
-    function() {
+    function () {
       toNlcst({type: 'foo'})
     },
     /hast-util-to-nlcst expected file/,
@@ -38,7 +38,7 @@ test('hast-util-to-nlcst', function(t) {
   )
 
   t.throws(
-    function() {
+    function () {
       toNlcst({type: 'foo'})
     },
     /hast-util-to-nlcst expected file/,
@@ -46,7 +46,7 @@ test('hast-util-to-nlcst', function(t) {
   )
 
   t.throws(
-    function() {
+    function () {
       toNlcst({type: 'text', value: 'foo'}, {foo: 'bar'})
     },
     /hast-util-to-nlcst expected file/,
@@ -54,7 +54,7 @@ test('hast-util-to-nlcst', function(t) {
   )
 
   t.throws(
-    function() {
+    function () {
       toNlcst({type: 'text', value: 'foo'}, vfile('foo'))
     },
     /hast-util-to-nlcst expected parser/,
@@ -62,14 +62,14 @@ test('hast-util-to-nlcst', function(t) {
   )
 
   t.throws(
-    function() {
+    function () {
       toNlcst({type: 'text', value: 'foo'}, vfile(), Latin)
     },
     /hast-util-to-nlcst expected position on nodes/,
     'should fail when not given positional information'
   )
 
-  t.doesNotThrow(function() {
+  t.doesNotThrow(function () {
     toNlcst(
       {
         type: 'text',
@@ -84,7 +84,7 @@ test('hast-util-to-nlcst', function(t) {
     )
   }, 'should accept a parser constructor')
 
-  t.doesNotThrow(function() {
+  t.doesNotThrow(function () {
     toNlcst(
       {
         type: 'text',
@@ -100,7 +100,7 @@ test('hast-util-to-nlcst', function(t) {
   }, 'should accept a parser instance')
 
   t.throws(
-    function() {
+    function () {
       toNlcst(
         {
           type: 'text',
@@ -115,7 +115,7 @@ test('hast-util-to-nlcst', function(t) {
     'should fail when not given positional information (#2)'
   )
 
-  t.test('should accept nodes without offsets', function(st) {
+  t.test('should accept nodes without offsets', function (st) {
     var node = toNlcst(
       {
         type: 'text',
@@ -138,12 +138,12 @@ test('hast-util-to-nlcst', function(t) {
   t.end()
 })
 
-test('Fixtures', function(t) {
+test('Fixtures', function (t) {
   var root = path.join(__dirname, 'fixtures')
 
   fs.readdirSync(root)
     .filter(negate(hidden))
-    .forEach(function(fixture) {
+    .forEach(function (fixture) {
       var input = path.join(root, fixture, 'input.html')
       var output = path.join(root, fixture, 'output.json')
       var file = vfile(fs.readFileSync(input))

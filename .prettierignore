@@ -1,3 +1,6 @@
 coverage/
 hast-util-to-nlcst.js
 hast-util-to-nlcst.min.js
+*.html
+*.json
+*.md
