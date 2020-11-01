@@ -136,7 +136,7 @@ function toNlcst(tree, file, Parser) {
   function add(node) {
     var result = ('length' in node ? all : one)(node)
 
-    if (result.length !== 0) {
+    if (result.length > 0) {
       results.push(parser.tokenizeParagraph(result))
     }
   }
