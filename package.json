@@ -37,7 +37,7 @@
     "hast-util-whitespace": "^1.0.0",
     "nlcst-to-string": "^2.0.0",
     "unist-util-position": "^3.0.0",
-    "vfile-location": "^3.0.0"
+    "vfile-location": "^3.1.0"
   },
   "devDependencies": {
     "browserify": "^17.0.0",
@@ -83,6 +83,7 @@
     "prettier": true,
     "esnext": false,
     "rules": {
+      "unicorn/explicit-length-check": "off",
       "unicorn/no-fn-reference-in-iterator": "off",
       "unicorn/prefer-optional-catch-binding": "off"
     },

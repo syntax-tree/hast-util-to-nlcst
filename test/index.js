@@ -135,6 +135,33 @@ test('hast-util-to-nlcst', function (t) {
     st.end()
   })
 
+  t.test('should accept comments', function (st) {
+    var node = toNlcst(
+      {
+        type: 'comment',
+        value: 'a',
+        position: {start: {line: 1, column: 1}, end: {line: 1, column: 9}}
+      },
+      vfile('<!--a-->'),
+      Latin
+    )
+
+    st.deepEqual(
+      node,
+      {
+        type: 'RootNode',
+        children: [],
+        position: {
+          start: {line: 1, column: 1, offset: 0},
+          end: {line: 1, column: 9, offset: 8}
+        }
+      },
+      'should support comments'
+    )
+
+    st.end()
+  })
+
   t.end()
 })
 
