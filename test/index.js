@@ -167,25 +167,29 @@ test('hast-util-to-nlcst', function (t) {
 
 test('Fixtures', function (t) {
   var root = path.join(__dirname, 'fixtures')
+  var files = fs.readdirSync(root).filter(negate(hidden))
+  var index = -1
+  var input
+  var output
+  var file
+  var actual
+  var expected
 
-  fs.readdirSync(root)
-    .filter(negate(hidden))
-    .forEach(function (fixture) {
-      var input = path.join(root, fixture, 'input.html')
-      var output = path.join(root, fixture, 'output.json')
-      var file = vfile(fs.readFileSync(input))
-      var actual = toNlcst(rehype().parse(file), file, Latin)
-      var expected
+  while (++index < files.length) {
+    input = path.join(root, files[index], 'input.html')
+    output = path.join(root, files[index], 'output.json')
+    file = vfile(fs.readFileSync(input))
+    actual = toNlcst(rehype().parse(file), file, Latin)
 
-      try {
-        expected = JSON.parse(fs.readFileSync(output))
-      } catch (_) {
-        fs.writeFileSync(output, JSON.stringify(actual, null, 2) + '\n')
-        return
-      }
+    try {
+      expected = JSON.parse(fs.readFileSync(output))
+    } catch (_) {
+      fs.writeFileSync(output, JSON.stringify(actual, null, 2) + '\n')
+      return
+    }
 
-      t.deepEqual(actual, expected, 'should work on `' + fixture + '`')
-    })
+    t.deepEqual(actual, expected, 'should work on `' + files[index] + '`')
+  }
 
   t.end()
 })
