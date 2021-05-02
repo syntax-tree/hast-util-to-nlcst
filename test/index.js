@@ -12,6 +12,7 @@ import {toNlcst} from '../index.js'
 test('hast-util-to-nlcst', function (t) {
   t.throws(
     function () {
+      // @ts-ignore runtime.
       toNlcst()
     },
     /hast-util-to-nlcst expected node/,
@@ -20,6 +21,7 @@ test('hast-util-to-nlcst', function (t) {
 
   t.throws(
     function () {
+      // @ts-ignore runtime.
       toNlcst({})
     },
     /hast-util-to-nlcst expected node/,
@@ -28,6 +30,7 @@ test('hast-util-to-nlcst', function (t) {
 
   t.throws(
     function () {
+      // @ts-ignore runtime.
       toNlcst({type: 'foo'})
     },
     /hast-util-to-nlcst expected file/,
@@ -36,6 +39,7 @@ test('hast-util-to-nlcst', function (t) {
 
   t.throws(
     function () {
+      // @ts-ignore runtime.
       toNlcst({type: 'foo'})
     },
     /hast-util-to-nlcst expected file/,
@@ -44,6 +48,7 @@ test('hast-util-to-nlcst', function (t) {
 
   t.throws(
     function () {
+      // @ts-ignore runtime.
       toNlcst({type: 'text', value: 'foo'}, {foo: 'bar'})
     },
     /hast-util-to-nlcst expected file/,
@@ -52,6 +57,7 @@ test('hast-util-to-nlcst', function (t) {
 
   t.throws(
     function () {
+      // @ts-ignore runtime.
       toNlcst({type: 'text', value: 'foo'}, vfile('foo'))
     },
     /hast-util-to-nlcst expected parser/,
@@ -102,6 +108,7 @@ test('hast-util-to-nlcst', function (t) {
         {
           type: 'text',
           value: 'foo',
+          // @ts-ignore runtime.
           position: {start: {}, end: {}}
         },
         vfile(),
@@ -166,10 +173,15 @@ test('Fixtures', function (t) {
   var root = path.join('test', 'fixtures')
   var files = fs.readdirSync(root)
   var index = -1
+  /** @type {string} */
   var input
+  /** @type {string} */
   var output
+  /** @type {import('vfile').VFile} */
   var file
+  /** @type {import('unist').Node} */
   var actual
+  /** @type {import('unist').Node} */
   var expected
 
   while (++index < files.length) {
@@ -178,10 +190,11 @@ test('Fixtures', function (t) {
     input = path.join(root, files[index], 'input.html')
     output = path.join(root, files[index], 'output.json')
     file = vfile(fs.readFileSync(input))
+    // @ts-ignore Assume hast.
     actual = toNlcst(rehype().parse(file), file, ParseLatin)
 
     try {
-      expected = JSON.parse(fs.readFileSync(output))
+      expected = JSON.parse(String(fs.readFileSync(output)))
     } catch {
       fs.writeFileSync(output, JSON.stringify(actual, null, 2) + '\n')
       return
