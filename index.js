@@ -1,23 +1,26 @@
-'use strict'
-
-var embedded = require('hast-util-embedded')
-var convert = require('hast-util-is-element/convert')
-var phrasing = require('hast-util-phrasing')
-var textContent = require('hast-util-to-string')
-var whitespace = require('hast-util-whitespace')
-var toString = require('nlcst-to-string')
-var position = require('unist-util-position')
-var vfileLocation = require('vfile-location')
-
-module.exports = toNlcst
+import {embedded} from 'hast-util-embedded'
+import {convertElement} from 'hast-util-is-element'
+import {phrasing} from 'hast-util-phrasing'
+import toString from 'hast-util-to-string'
+import {whitespace} from 'hast-util-whitespace'
+import {toString as nlcstToString} from 'nlcst-to-string'
+import {pointStart} from 'unist-util-position'
+import vfileLocation from 'vfile-location'
 
 var push = [].push
 
-var source = convert(['code', dataNlcstSourced])
-var ignore = convert(['script', 'style', 'svg', 'math', 'del', dataNlcstIgnore])
-var explicit = convert(['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
+var source = convertElement(['code', dataNlcstSourced])
+var ignore = convertElement([
+  'script',
+  'style',
+  'svg',
+  'math',
+  'del',
+  dataNlcstIgnore
+])
+var explicit = convertElement(['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
 
-var flowAccepting = convert([
+var flowAccepting = convertElement([
   'body',
   'article',
   'section',
@@ -44,10 +47,10 @@ var flowAccepting = convert([
 ])
 
 // See: <https://html.spec.whatwg.org/multipage/dom.html#paragraphs>
-var unravelInParagraph = convert(['a', 'ins', 'del', 'map'])
+var unravelInParagraph = convertElement(['a', 'ins', 'del', 'map'])
 
 // Transform `tree` to nlcst.
-function toNlcst(tree, file, Parser) {
+export function toNlcst(tree, file, Parser) {
   var parser
   var location
   var results
@@ -67,7 +70,7 @@ function toNlcst(tree, file, Parser) {
     throw new Error('hast-util-to-nlcst expected parser')
   }
 
-  if (!position.start(tree).line || !position.start(tree).column) {
+  if (!pointStart(tree).line || !pointStart(tree).column) {
     throw new Error('hast-util-to-nlcst expected position on nodes')
   }
 
@@ -130,7 +133,7 @@ function toNlcst(tree, file, Parser) {
   function add(node) {
     var result = ('length' in node ? all : one)(node)
 
-    if (result.length) {
+    if (result.length > 0) {
       results.push(parser.tokenizeParagraph(result))
     }
   }
@@ -182,7 +185,7 @@ function toNlcst(tree, file, Parser) {
         replacement = [parser.tokenizeWhiteSpace('\n')]
         change = true
       } else if (source(node)) {
-        replacement = [parser.tokenizeSource(textContent(node))]
+        replacement = [parser.tokenizeSource(toString(node))]
         change = true
       } else {
         replacement = all(node.children)
@@ -190,7 +193,7 @@ function toNlcst(tree, file, Parser) {
     }
 
     return change
-      ? patch(replacement, location, location.toOffset(position.start(node)))
+      ? patch(replacement, location, location.toOffset(pointStart(node)))
       : replacement
   }
 
@@ -224,7 +227,7 @@ function toNlcst(tree, file, Parser) {
         patch(node.children, location, start)
       }
 
-      end = start + toString(node).length
+      end = start + nlcstToString(node).length
 
       node.position = {
         start: location.toPoint(start),

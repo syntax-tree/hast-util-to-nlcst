@@ -14,6 +14,9 @@
 
 ## Install
 
+This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c):
+Node 12+ is needed to use it and it must be `import`ed instead of `require`d.
+
 [npm][]:
 
 ```sh
@@ -35,16 +38,16 @@ Say we have the following `example.html`:
 …and next to it, `index.js`:
 
 ```js
-var rehype = require('rehype')
-var vfile = require('to-vfile')
-var English = require('parse-english')
-var inspect = require('unist-util-inspect')
-var toNlcst = require('hast-util-to-nlcst')
+import rehype from 'rehype'
+import vfile from 'to-vfile'
+import {ParseEnglish} from 'parse-english'
+import {inspect} from 'unist-util-inspect'
+import {toNlcst} from 'hast-util-to-nlcst'
 
 var file = vfile.readSync('example.html')
 var tree = rehype().parse(file)
 
-console.log(inspect(toNlcst(tree, file, English)))
+console.log(inspect(toNlcst(tree, file, ParseEnglish)))
 ```
 
 Which, when running, yields:
@@ -72,6 +75,9 @@ RootNode[2] (1:1-6:1, 0-134)
 ```
 
 ## API
+
+This package exports the following identifiers: `toNlcst`.
+There is no default export.
 
 ### `toNlcst(tree, file, Parser)`
 

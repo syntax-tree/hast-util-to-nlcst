@@ -1,16 +1,13 @@
-'use strict'
-
-var fs = require('fs')
-var path = require('path')
-var test = require('tape')
-var rehype = require('rehype')
-var vfile = require('vfile')
-var Latin = require('parse-latin')
-var Dutch = require('parse-dutch')
-var English = require('parse-english')
-var negate = require('negate')
-var hidden = require('is-hidden')
-var toNlcst = require('..')
+import fs from 'fs'
+import path from 'path'
+import test from 'tape'
+import rehype from 'rehype'
+import vfile from 'vfile'
+import {ParseLatin} from 'parse-latin'
+import {ParseDutch} from 'parse-dutch'
+import {ParseEnglish} from 'parse-english'
+import {isHidden} from 'is-hidden'
+import {toNlcst} from '../index.js'
 
 test('hast-util-to-nlcst', function (t) {
   t.throws(
@@ -63,7 +60,7 @@ test('hast-util-to-nlcst', function (t) {
 
   t.throws(
     function () {
-      toNlcst({type: 'text', value: 'foo'}, vfile(), Latin)
+      toNlcst({type: 'text', value: 'foo'}, vfile(), ParseLatin)
     },
     /hast-util-to-nlcst expected position on nodes/,
     'should fail when not given positional information'
@@ -80,7 +77,7 @@ test('hast-util-to-nlcst', function (t) {
         }
       },
       vfile(),
-      English
+      ParseEnglish
     )
   }, 'should accept a parser constructor')
 
@@ -95,7 +92,7 @@ test('hast-util-to-nlcst', function (t) {
         }
       },
       vfile(),
-      new Dutch()
+      new ParseDutch()
     )
   }, 'should accept a parser instance')
 
@@ -108,7 +105,7 @@ test('hast-util-to-nlcst', function (t) {
           position: {start: {}, end: {}}
         },
         vfile(),
-        Latin
+        ParseLatin
       )
     },
     /hast-util-to-nlcst expected position on nodes/,
@@ -126,7 +123,7 @@ test('hast-util-to-nlcst', function (t) {
         }
       },
       vfile('foo'),
-      Latin
+      ParseLatin
     )
 
     st.equal(node.position.start.offset, 0, 'should set starting offset')
@@ -143,7 +140,7 @@ test('hast-util-to-nlcst', function (t) {
         position: {start: {line: 1, column: 1}, end: {line: 1, column: 9}}
       },
       vfile('<!--a-->'),
-      Latin
+      ParseLatin
     )
 
     st.deepEqual(
@@ -166,8 +163,8 @@ test('hast-util-to-nlcst', function (t) {
 })
 
 test('Fixtures', function (t) {
-  var root = path.join(__dirname, 'fixtures')
-  var files = fs.readdirSync(root).filter(negate(hidden))
+  var root = path.join('test', 'fixtures')
+  var files = fs.readdirSync(root)
   var index = -1
   var input
   var output
@@ -176,14 +173,16 @@ test('Fixtures', function (t) {
   var expected
 
   while (++index < files.length) {
+    if (isHidden(files[index])) continue
+
     input = path.join(root, files[index], 'input.html')
     output = path.join(root, files[index], 'output.json')
     file = vfile(fs.readFileSync(input))
-    actual = toNlcst(rehype().parse(file), file, Latin)
+    actual = toNlcst(rehype().parse(file), file, ParseLatin)
 
     try {
       expected = JSON.parse(fs.readFileSync(output))
-    } catch (_) {
+    } catch {
       fs.writeFileSync(output, JSON.stringify(actual, null, 2) + '\n')
       return
     }
