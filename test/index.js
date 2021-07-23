@@ -9,9 +9,9 @@ import {ParseEnglish} from 'parse-english'
 import {isHidden} from 'is-hidden'
 import {toNlcst} from '../index.js'
 
-test('hast-util-to-nlcst', function (t) {
+test('hast-util-to-nlcst', (t) => {
   t.throws(
-    function () {
+    () => {
       // @ts-ignore runtime.
       toNlcst()
     },
@@ -20,7 +20,7 @@ test('hast-util-to-nlcst', function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       // @ts-ignore runtime.
       toNlcst({})
     },
@@ -29,7 +29,7 @@ test('hast-util-to-nlcst', function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       // @ts-ignore runtime.
       toNlcst({type: 'foo'})
     },
@@ -38,7 +38,7 @@ test('hast-util-to-nlcst', function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       // @ts-ignore runtime.
       toNlcst({type: 'foo'})
     },
@@ -47,7 +47,7 @@ test('hast-util-to-nlcst', function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       // @ts-ignore runtime.
       toNlcst({type: 'text', value: 'foo'}, {foo: 'bar'})
     },
@@ -56,7 +56,7 @@ test('hast-util-to-nlcst', function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       // @ts-ignore runtime.
       toNlcst({type: 'text', value: 'foo'}, vfile('foo'))
     },
@@ -65,14 +65,14 @@ test('hast-util-to-nlcst', function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       toNlcst({type: 'text', value: 'foo'}, vfile(), ParseLatin)
     },
     /hast-util-to-nlcst expected position on nodes/,
     'should fail when not given positional information'
   )
 
-  t.doesNotThrow(function () {
+  t.doesNotThrow(() => {
     toNlcst(
       {
         type: 'text',
@@ -87,7 +87,7 @@ test('hast-util-to-nlcst', function (t) {
     )
   }, 'should accept a parser constructor')
 
-  t.doesNotThrow(function () {
+  t.doesNotThrow(() => {
     toNlcst(
       {
         type: 'text',
@@ -103,7 +103,7 @@ test('hast-util-to-nlcst', function (t) {
   }, 'should accept a parser instance')
 
   t.throws(
-    function () {
+    () => {
       toNlcst(
         {
           type: 'text',
@@ -119,8 +119,8 @@ test('hast-util-to-nlcst', function (t) {
     'should fail when not given positional information (#2)'
   )
 
-  t.test('should accept nodes without offsets', function (st) {
-    var node = toNlcst(
+  t.test('should accept nodes without offsets', (st) => {
+    const node = toNlcst(
       {
         type: 'text',
         value: 'foo',
@@ -139,8 +139,8 @@ test('hast-util-to-nlcst', function (t) {
     st.end()
   })
 
-  t.test('should accept comments', function (st) {
-    var node = toNlcst(
+  t.test('should accept comments', (st) => {
+    const node = toNlcst(
       {
         type: 'comment',
         value: 'a',
@@ -169,20 +169,20 @@ test('hast-util-to-nlcst', function (t) {
   t.end()
 })
 
-test('Fixtures', function (t) {
-  var root = path.join('test', 'fixtures')
-  var files = fs.readdirSync(root)
-  var index = -1
+test('Fixtures', (t) => {
+  const root = path.join('test', 'fixtures')
+  const files = fs.readdirSync(root)
+  let index = -1
   /** @type {string} */
-  var input
+  let input
   /** @type {string} */
-  var output
+  let output
   /** @type {import('vfile').VFile} */
-  var file
+  let file
   /** @type {import('unist').Node} */
-  var actual
+  let actual
   /** @type {import('unist').Node} */
-  var expected
+  let expected
 
   while (++index < files.length) {
     if (isHidden(files[index])) continue

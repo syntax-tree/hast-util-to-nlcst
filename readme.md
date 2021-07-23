@@ -38,14 +38,14 @@ Say we have the following `example.html`:
 …and next to it, `index.js`:
 
 ```js
-import rehype from 'rehype'
-import vfile from 'to-vfile'
-import {ParseEnglish} from 'parse-english'
+import {readSync} from 'to-vfile'
 import {inspect} from 'unist-util-inspect'
 import {toNlcst} from 'hast-util-to-nlcst'
+import {ParseEnglish} from 'parse-english'
+import rehype from 'rehype'
 
-var file = vfile.readSync('example.html')
-var tree = rehype().parse(file)
+const file = readSync('example.html')
+const tree = rehype().parse(file)
 
 console.log(inspect(toNlcst(tree, file, ParseEnglish)))
 ```
