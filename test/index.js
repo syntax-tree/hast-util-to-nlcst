@@ -3,8 +3,11 @@ import path from 'path'
 import test from 'tape'
 import rehype from 'rehype'
 import vfile from 'vfile'
+// @ts-expect-error: to do type.
 import {ParseLatin} from 'parse-latin'
+// @ts-expect-error: to do type.
 import {ParseDutch} from 'parse-dutch'
+// @ts-expect-error: to do type.
 import {ParseEnglish} from 'parse-english'
 import {isHidden} from 'is-hidden'
 import {toNlcst} from '../index.js'
