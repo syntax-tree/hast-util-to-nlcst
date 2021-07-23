@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import test from 'tape'
 import rehype from 'rehype'
-import vfile from 'vfile'
+import {VFile} from 'vfile'
 // @ts-expect-error: to do type.
 import {ParseLatin} from 'parse-latin'
 // @ts-expect-error: to do type.
@@ -61,7 +61,7 @@ test('hast-util-to-nlcst', (t) => {
   t.throws(
     () => {
       // @ts-ignore runtime.
-      toNlcst({type: 'text', value: 'foo'}, vfile('foo'))
+      toNlcst({type: 'text', value: 'foo'}, new VFile('foo'))
     },
     /hast-util-to-nlcst expected parser/,
     'should fail without parser'
@@ -69,7 +69,7 @@ test('hast-util-to-nlcst', (t) => {
 
   t.throws(
     () => {
-      toNlcst({type: 'text', value: 'foo'}, vfile(), ParseLatin)
+      toNlcst({type: 'text', value: 'foo'}, new VFile(), ParseLatin)
     },
     /hast-util-to-nlcst expected position on nodes/,
     'should fail when not given positional information'
@@ -85,7 +85,7 @@ test('hast-util-to-nlcst', (t) => {
           end: {line: 1, column: 4}
         }
       },
-      vfile(),
+      new VFile(),
       ParseEnglish
     )
   }, 'should accept a parser constructor')
@@ -100,7 +100,7 @@ test('hast-util-to-nlcst', (t) => {
           end: {line: 1, column: 4}
         }
       },
-      vfile(),
+      new VFile(),
       new ParseDutch()
     )
   }, 'should accept a parser instance')
@@ -114,7 +114,7 @@ test('hast-util-to-nlcst', (t) => {
           // @ts-ignore runtime.
           position: {start: {}, end: {}}
         },
-        vfile(),
+        new VFile(),
         ParseLatin
       )
     },
@@ -132,7 +132,7 @@ test('hast-util-to-nlcst', (t) => {
           end: {line: 1, column: 4}
         }
       },
-      vfile('foo'),
+      new VFile('foo'),
       ParseLatin
     )
 
@@ -149,7 +149,7 @@ test('hast-util-to-nlcst', (t) => {
         value: 'a',
         position: {start: {line: 1, column: 1}, end: {line: 1, column: 9}}
       },
-      vfile('<!--a-->'),
+      new VFile('<!--a-->'),
       ParseLatin
     )
 
@@ -192,7 +192,7 @@ test('Fixtures', (t) => {
 
     input = path.join(root, files[index], 'input.html')
     output = path.join(root, files[index], 'output.json')
-    file = vfile(fs.readFileSync(input))
+    file = new VFile(fs.readFileSync(input))
     // @ts-ignore Assume hast.
     actual = toNlcst(rehype().parse(file), file, ParseLatin)
 
