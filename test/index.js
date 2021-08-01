@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import test from 'tape'
-import rehype from 'rehype'
+import {rehype} from 'rehype'
 import {VFile} from 'vfile'
 // @ts-expect-error: to do type.
 import {ParseLatin} from 'parse-latin'
@@ -193,7 +193,6 @@ test('Fixtures', (t) => {
     input = path.join(root, files[index], 'input.html')
     output = path.join(root, files[index], 'output.json')
     file = new VFile(fs.readFileSync(input))
-    // @ts-ignore Assume hast.
     actual = toNlcst(rehype().parse(file), file, ParseLatin)
 
     try {
