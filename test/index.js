@@ -15,7 +15,7 @@ import {toNlcst} from '../index.js'
 test('hast-util-to-nlcst', (t) => {
   t.throws(
     () => {
-      // @ts-ignore runtime.
+      // @ts-expect-error runtime.
       toNlcst()
     },
     /hast-util-to-nlcst expected node/,
@@ -24,7 +24,7 @@ test('hast-util-to-nlcst', (t) => {
 
   t.throws(
     () => {
-      // @ts-ignore runtime.
+      // @ts-expect-error runtime.
       toNlcst({})
     },
     /hast-util-to-nlcst expected node/,
@@ -33,7 +33,7 @@ test('hast-util-to-nlcst', (t) => {
 
   t.throws(
     () => {
-      // @ts-ignore runtime.
+      // @ts-expect-error runtime.
       toNlcst({type: 'foo'})
     },
     /hast-util-to-nlcst expected file/,
@@ -42,7 +42,7 @@ test('hast-util-to-nlcst', (t) => {
 
   t.throws(
     () => {
-      // @ts-ignore runtime.
+      // @ts-expect-error runtime.
       toNlcst({type: 'foo'})
     },
     /hast-util-to-nlcst expected file/,
@@ -51,7 +51,7 @@ test('hast-util-to-nlcst', (t) => {
 
   t.throws(
     () => {
-      // @ts-ignore runtime.
+      // @ts-expect-error runtime.
       toNlcst({type: 'text', value: 'foo'}, {foo: 'bar'})
     },
     /hast-util-to-nlcst expected file/,
@@ -60,7 +60,7 @@ test('hast-util-to-nlcst', (t) => {
 
   t.throws(
     () => {
-      // @ts-ignore runtime.
+      // @ts-expect-error runtime.
       toNlcst({type: 'text', value: 'foo'}, new VFile('foo'))
     },
     /hast-util-to-nlcst expected parser/,
@@ -111,7 +111,7 @@ test('hast-util-to-nlcst', (t) => {
         {
           type: 'text',
           value: 'foo',
-          // @ts-ignore runtime.
+          // @ts-expect-error runtime.
           position: {start: {}, end: {}}
         },
         new VFile(),
@@ -122,7 +122,7 @@ test('hast-util-to-nlcst', (t) => {
     'should fail when not given positional information (#2)'
   )
 
-  t.test('should accept nodes without offsets', (st) => {
+  t.test('should accept nodes without offsets', (t) => {
     const node = toNlcst(
       {
         type: 'text',
@@ -136,13 +136,21 @@ test('hast-util-to-nlcst', (t) => {
       ParseLatin
     )
 
-    st.equal(node.position.start.offset, 0, 'should set starting offset')
-    st.equal(node.position.end.offset, 3, 'should set ending offset')
+    t.equal(
+      node.position && node.position.start.offset,
+      0,
+      'should set starting offset'
+    )
+    t.equal(
+      node.position && node.position.end.offset,
+      3,
+      'should set ending offset'
+    )
 
-    st.end()
+    t.end()
   })
 
-  t.test('should accept comments', (st) => {
+  t.test('should accept comments', (t) => {
     const node = toNlcst(
       {
         type: 'comment',
@@ -153,7 +161,7 @@ test('hast-util-to-nlcst', (t) => {
       ParseLatin
     )
 
-    st.deepEqual(
+    t.deepEqual(
       node,
       {
         type: 'RootNode',
@@ -166,7 +174,7 @@ test('hast-util-to-nlcst', (t) => {
       'should support comments'
     )
 
-    st.end()
+    t.end()
   })
 
   t.end()
