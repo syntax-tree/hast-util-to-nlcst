@@ -8,24 +8,67 @@
 [![Backers][backers-badge]][collective]
 [![Chat][chat-badge]][chat]
 
-[**hast**][hast] utility to transform to [**nlcst**][nlcst].
+[hast][] utility to transform to [nlcst][].
 
-> **Note**: You probably want to use [`rehype-retext`][rehype-retext].
+## Contents
+
+*   [What is this?](#what-is-this)
+*   [When should I use this?](#when-should-i-use-this)
+*   [Install](#install)
+*   [Use](#use)
+*   [API](#api)
+    *   [`toNlcst(tree, file, Parser)`](#tonlcsttree-file-parser)
+*   [Types](#types)
+*   [Compatibility](#compatibility)
+*   [Security](#security)
+*   [Related](#related)
+*   [Contribute](#contribute)
+*   [License](#license)
+
+## What is this?
+
+This package is a utility that takes a [hast][] (HTML) syntax tree as input and
+turns it into [nlcst][] (natural language).
+
+## When should I use this?
+
+This project is useful when you want to deal with ASTs and inspect the natural
+language inside HTML.
+Unfortunately, there is no way yet to apply changes to the nlcst back into
+hast.
+
+The mdast utility [`mdast-util-to-nlcst`][mdast-util-to-nlcst] does the same but
+uses a markdown tree as input.
+
+The rehype plugin [`rehype-retext`][rehype-retext] wraps this utility to do the
+same at a higher-level (easier) abstraction.
 
 ## Install
 
-This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c):
-Node 12+ is needed to use it and it must be `import`ed instead of `require`d.
-
-[npm][]:
+This package is [ESM only][esm].
+In Node.js (version 12.20+, 14.14+, or 16.0+), install with [npm][]:
 
 ```sh
 npm install hast-util-to-nlcst
 ```
 
+In Deno with [`esm.sh`][esmsh]:
+
+```js
+import {toNlcst} from "https://esm.sh/hast-util-to-nlcst@2"
+```
+
+In browsers with [`esm.sh`][esmsh]:
+
+```html
+<script type="module">
+  import {toNlcst} from "https://esm.sh/hast-util-to-nlcst@2?bundle"
+</script>
+```
+
 ## Use
 
-Say we have the following `example.html`:
+Say our document `example.html` contains:
 
 ```html
 <article>
@@ -35,64 +78,58 @@ Say we have the following `example.html`:
 </article>
 ```
 
-…and next to it, `index.js`:
+…and our module `example.js` looks as follows:
 
 ```js
-import {readSync} from 'to-vfile'
+import {read} from 'to-vfile'
 import {inspect} from 'unist-util-inspect'
 import {toNlcst} from 'hast-util-to-nlcst'
 import {ParseEnglish} from 'parse-english'
-import rehype from 'rehype'
+import {rehype} from 'rehype'
 
-const file = readSync('example.html')
+const file = await read('example.html')
 const tree = rehype().parse(file)
 
 console.log(inspect(toNlcst(tree, file, ParseEnglish)))
 ```
 
-Which, when running, yields:
+…now running `node example.js` yields (positional info removed for brevity):
 
 ```txt
 RootNode[2] (1:1-6:1, 0-134)
-├─ ParagraphNode[3] (1:10-3:3, 9-24)
-│  ├─ WhiteSpaceNode: "\n  " (1:10-2:3, 9-12)
-│  ├─ SentenceNode[2] (2:3-2:12, 12-21)
-│  │  ├─ WordNode[1] (2:3-2:11, 12-20)
-│  │  │  └─ TextNode: "Implicit" (2:3-2:11, 12-20)
-│  │  └─ PunctuationNode: "." (2:11-2:12, 20-21)
-│  └─ WhiteSpaceNode: "\n  " (2:12-3:3, 21-24)
-└─ ParagraphNode[1] (3:7-3:43, 28-64)
-   └─ SentenceNode[4] (3:7-3:43, 28-64)
-      ├─ WordNode[1] (3:7-3:15, 28-36)
-      │  └─ TextNode: "Explicit" (3:7-3:15, 28-36)
-      ├─ PunctuationNode: ":" (3:15-3:16, 36-37)
-      ├─ WhiteSpaceNode: " " (3:16-3:17, 37-38)
-      └─ WordNode[4] (3:25-3:43, 46-64)
-         ├─ TextNode: "foo" (3:25-3:28, 46-49)
-         ├─ TextNode: "s" (3:37-3:38, 58-59)
-         ├─ PunctuationNode: "-" (3:38-3:39, 59-60)
-         └─ TextNode: "ball" (3:39-3:43, 60-64)
+├─0 ParagraphNode[3] (1:10-3:3, 9-24)
+│   ├─0 WhiteSpaceNode "\n  " (1:10-2:3, 9-12)
+│   ├─1 SentenceNode[2] (2:3-2:12, 12-21)
+│   │   ├─0 WordNode[1] (2:3-2:11, 12-20)
+│   │   │   └─0 TextNode "Implicit" (2:3-2:11, 12-20)
+│   │   └─1 PunctuationNode "." (2:11-2:12, 20-21)
+│   └─2 WhiteSpaceNode "\n  " (2:12-3:3, 21-24)
+└─1 ParagraphNode[1] (3:7-3:43, 28-64)
+    └─0 SentenceNode[4] (3:7-3:43, 28-64)
+        ├─0 WordNode[1] (3:7-3:15, 28-36)
+        │   └─0 TextNode "Explicit" (3:7-3:15, 28-36)
+        ├─1 PunctuationNode ":" (3:15-3:16, 36-37)
+        ├─2 WhiteSpaceNode " " (3:16-3:17, 37-38)
+        └─3 WordNode[4] (3:25-3:43, 46-64)
+            ├─0 TextNode "foo" (3:25-3:28, 46-49)
+            ├─1 TextNode "s" (3:37-3:38, 58-59)
+            ├─2 PunctuationNode "-" (3:38-3:39, 59-60)
+            └─3 TextNode "ball" (3:39-3:43, 60-64)
 ```
 
 ## API
 
-This package exports the following identifiers: `toNlcst`.
+This package exports the identifier `toNlcst`.
 There is no default export.
 
 ### `toNlcst(tree, file, Parser)`
 
-Transform the given [**hast**][hast] [*tree*][tree] to [**nlcst**][nlcst].
+[hast][] utility to transform to [nlcst][].
 
-##### Parameters
-
-*   `tree` ([`HastNode`][hast-node])
-    — [*Tree*][tree] with [positional info][positional-information]
-    ([`HastNode`][hast-node])
-*   `file` ([`VFile`][vfile])
-    — Virtual file
-*   `parser` (`Function`)
-    — [**nlcst**][nlcst] parser, such as [`parse-english`][english],
-    [`parse-dutch`][dutch], or [`parse-latin`][latin]
+> 👉 **Note**: `tree` must have positional info, `file` must be a [vfile][]
+> corresponding to `tree`, and `Parser` must be a parser such as
+> [`parse-english`][parse-english], [`parse-dutch`][parse-dutch], or
+> [`parse-latin`][parse-latin].
 
 ##### Returns
 
@@ -117,7 +154,7 @@ more info).
 ###### Ignored nodes
 
 Some elements are ignored and their content will not be present in
-[**nlcst**][nlcst]: `<script>`, `<style>`, `<svg>`, `<math>`, `<del>`.
+**[nlcst][]**: `<script>`, `<style>`, `<svg>`, `<math>`, `<del>`.
 
 To ignore other elements, add a `data-nlcst` attribute with a value of `ignore`:
 
@@ -128,7 +165,8 @@ To ignore other elements, add a `data-nlcst` attribute with a value of `ignore`:
 
 ###### Source nodes
 
-`<code>` elements are mapped to [`Source`][source] nodes in [**nlcst**][nlcst].
+`<code>` elements are mapped to [`Source`][nlcst-source] nodes in
+**[nlcst][]**.
 
 To mark other elements as source, add a `data-nlcst` attribute with a value
 of `source`:
@@ -137,6 +175,18 @@ of `source`:
 <p>This is <span data-nlcst="source">marked as source</span>.</p>
 <p data-nlcst="source">Completely marked.</p>
 ```
+
+## Types
+
+This package is fully typed with [TypeScript][].
+It exports the additional types `ParserConstructor` and `ParserInstance`.
+
+## Compatibility
+
+Projects maintained by the unified collective are compatible with all maintained
+versions of Node.js.
+As of now, that is Node.js 12.20+, 14.14+, and 16.0+.
+Our projects sometimes work with older versions, but this is not guaranteed.
 
 ## Security
 
@@ -147,19 +197,15 @@ openings for [cross-site scripting (XSS)][xss] attacks.
 
 *   [`mdast-util-to-nlcst`](https://github.com/syntax-tree/mdast-util-to-nlcst)
     — transform mdast to nlcst
-*   [`mdast-util-to-hast`](https://github.com/syntax-tree/mdast-util-to-hast)
-    — transform mdast to hast
 *   [`hast-util-to-mdast`](https://github.com/syntax-tree/hast-util-to-mdast)
     — transform hast to mdast
 *   [`hast-util-to-xast`](https://github.com/syntax-tree/hast-util-to-xast)
     — transform hast to xast
-*   [`hast-util-sanitize`](https://github.com/syntax-tree/hast-util-sanitize)
-    — sanitize hast nodes
 
 ## Contribute
 
-See [`contributing.md` in `syntax-tree/.github`][contributing] for ways to get
-started.
+See [`contributing.md`][contributing] in [`syntax-tree/.github`][health] for
+ways to get started.
 See [`support.md`][support] for ways to get help.
 
 This project has a [code of conduct][coc].
@@ -200,38 +246,42 @@ abide by its terms.
 
 [npm]: https://docs.npmjs.com/cli/install
 
+[esm]: https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c
+
+[esmsh]: https://esm.sh
+
+[typescript]: https://www.typescriptlang.org
+
 [license]: license
 
 [author]: https://wooorm.com
 
-[contributing]: https://github.com/syntax-tree/.github/blob/HEAD/contributing.md
+[health]: https://github.com/syntax-tree/.github
 
-[support]: https://github.com/syntax-tree/.github/blob/HEAD/support.md
+[contributing]: https://github.com/syntax-tree/.github/blob/main/contributing.md
 
-[coc]: https://github.com/syntax-tree/.github/blob/HEAD/code-of-conduct.md
+[support]: https://github.com/syntax-tree/.github/blob/main/support.md
 
-[english]: https://github.com/wooorm/parse-english
-
-[latin]: https://github.com/wooorm/parse-latin
-
-[dutch]: https://github.com/wooorm/parse-dutch
+[coc]: https://github.com/syntax-tree/.github/blob/main/code-of-conduct.md
 
 [rehype-retext]: https://github.com/rehypejs/rehype-retext
 
-[tree]: https://github.com/syntax-tree/unist#tree
-
-[positional-information]: https://github.com/syntax-tree/unist#positional-information
+[vfile]: https://github.com/vfile/vfile
 
 [hast]: https://github.com/syntax-tree/hast
-
-[hast-node]: https://github.com/syntax-tree/hast#nodes
 
 [nlcst]: https://github.com/syntax-tree/nlcst
 
 [nlcst-node]: https://github.com/syntax-tree/nlcst#nodes
 
-[vfile]: https://github.com/vfile/vfile
+[nlcst-source]: https://github.com/syntax-tree/nlcst#source
 
-[source]: https://github.com/syntax-tree/nlcst#source
+[mdast-util-to-nlcst]: https://github.com/syntax-tree/mdast-util-to-nlcst
 
 [xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
+
+[parse-english]: https://github.com/wooorm/parse-english
+
+[parse-latin]: https://github.com/wooorm/parse-latin
+
+[parse-dutch]: https://github.com/wooorm/parse-dutch
