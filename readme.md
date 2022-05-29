@@ -84,11 +84,11 @@ Say our document `example.html` contains:
 import {read} from 'to-vfile'
 import {inspect} from 'unist-util-inspect'
 import {toNlcst} from 'hast-util-to-nlcst'
+import {fromHtml} from 'hast-util-from-html'
 import {ParseEnglish} from 'parse-english'
-import {rehype} from 'rehype'
 
 const file = await read('example.html')
-const tree = rehype().parse(file)
+const tree = fromHtml(file)
 
 console.log(inspect(toNlcst(tree, file, ParseEnglish)))
 ```
