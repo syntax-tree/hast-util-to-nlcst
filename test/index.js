@@ -8,8 +8,15 @@ import {ParseDutch} from 'parse-dutch'
 import {ParseEnglish} from 'parse-english'
 import {fromHtml} from 'hast-util-from-html'
 import {toNlcst} from '../index.js'
+import * as mod from '../index.js'
 
 test('toNlcst', () => {
+  assert.deepEqual(
+    Object.keys(mod).sort(),
+    ['toNlcst'],
+    'should expose the public api'
+  )
+
   assert.throws(
     () => {
       // @ts-expect-error runtime.
