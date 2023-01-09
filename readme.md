@@ -18,6 +18,8 @@
 *   [Use](#use)
 *   [API](#api)
     *   [`toNlcst(tree, file, Parser)`](#tonlcsttree-file-parser)
+    *   [`ParserConstructor`](#parserconstructor)
+    *   [`ParserInstance`](#parserinstance)
 *   [Types](#types)
 *   [Compatibility](#compatibility)
 *   [Security](#security)
@@ -46,7 +48,7 @@ same at a higher-level (easier) abstraction.
 ## Install
 
 This package is [ESM only][esm].
-In Node.js (version 12.20+, 14.14+, or 16.0+), install with [npm][]:
+In Node.js (version 14.14+ and or 16.0+), install with [npm][]:
 
 ```sh
 npm install hast-util-to-nlcst
@@ -119,17 +121,25 @@ RootNode[2] (1:1-6:1, 0-134)
 
 ## API
 
-This package exports the identifier `toNlcst`.
+This package exports the identifier [`toNlcst`][tonlcst].
 There is no default export.
 
 ### `toNlcst(tree, file, Parser)`
 
-[hast][] utility to transform to [nlcst][].
+Turn a hast tree into an nlcst tree.
 
-> 👉 **Note**: `tree` must have positional info, `file` must be a [vfile][]
-> corresponding to `tree`, and `Parser` must be a parser such as
-> [`parse-english`][parse-english], [`parse-dutch`][parse-dutch], or
-> [`parse-latin`][parse-latin].
+> 👉 **Note**: `tree` must have positional info and `file` must be a `VFile`
+> corresponding to `tree`.
+
+##### Parameters
+
+*   `tree` ([`HastNode`][hast-node])
+    — hast tree to transform
+*   `file` ([`VFile`][vfile])
+    — virtual file
+*   `Parser` ([`ParserConstructor`][parserconstructor] or
+    [`ParserInstance`][parserinstance])
+    — parser to use.
 
 ##### Returns
 
@@ -176,16 +186,46 @@ of `source`:
 <p data-nlcst="source">Completely marked.</p>
 ```
 
+### `ParserConstructor`
+
+Create a new parser (TypeScript type).
+
+###### Type
+
+```ts
+type ParserConstructor = new () => ParserInstance
+```
+
+### `ParserInstance`
+
+nlcst parser (TypeScript type).
+
+For example, [`parse-dutch`][parse-dutch], [`parse-english`][parse-english], or
+[`parse-latin`][parse-latin].
+
+###### Type
+
+```ts
+type ParserInstance = type ParserInstance = {
+  tokenizeSentencePlugins: Array<(node: NlcstSentence) => void>
+  tokenizeParagraphPlugins: Array<(node: NlcstParagraph) => void>
+  parse(value: string | null | undefined): NlcstRoot
+  tokenizeParagraph(value: string | null | undefined): NlcstParagraph
+  tokenize(value: string | null | undefined): Array<NlcstSentenceContent>
+}
+```
+
 ## Types
 
 This package is fully typed with [TypeScript][].
-It exports the additional types `ParserConstructor` and `ParserInstance`.
+It exports the additional types [`ParserConstructor`][parserconstructor] and
+[`ParserInstance`][parserinstance].
 
 ## Compatibility
 
 Projects maintained by the unified collective are compatible with all maintained
 versions of Node.js.
-As of now, that is Node.js 12.20+, 14.14+, and 16.0+.
+As of now, that is Node.js 14.14+ and 16.0+.
 Our projects sometimes work with older versions, but this is not guaranteed.
 
 ## Security
@@ -270,6 +310,8 @@ abide by its terms.
 
 [hast]: https://github.com/syntax-tree/hast
 
+[hast-node]: https://github.com/syntax-tree/hast#nodes
+
 [nlcst]: https://github.com/syntax-tree/nlcst
 
 [nlcst-node]: https://github.com/syntax-tree/nlcst#nodes
@@ -285,3 +327,9 @@ abide by its terms.
 [parse-latin]: https://github.com/wooorm/parse-latin
 
 [parse-dutch]: https://github.com/wooorm/parse-dutch
+
+[tonlcst]: #tonlcsttree-file-parser
+
+[parserconstructor]: #parserconstructor
+
+[parserinstance]: #parserinstance
