@@ -1,16 +1,16 @@
-import fs from 'node:fs'
-import path from 'node:path'
-import test from 'tape'
-import {rehype} from 'rehype'
+import assert from 'node:assert/strict'
+import fs from 'node:fs/promises'
+import test from 'node:test'
+import {isHidden} from 'is-hidden'
 import {VFile} from 'vfile'
 import {ParseLatin} from 'parse-latin'
 import {ParseDutch} from 'parse-dutch'
 import {ParseEnglish} from 'parse-english'
-import {isHidden} from 'is-hidden'
+import {fromHtml} from 'hast-util-from-html'
 import {toNlcst} from '../index.js'
 
-test('hast-util-to-nlcst', (t) => {
-  t.throws(
+test('toNlcst', () => {
+  assert.throws(
     () => {
       // @ts-expect-error runtime.
       toNlcst()
@@ -19,7 +19,7 @@ test('hast-util-to-nlcst', (t) => {
     'should fail when not given a tree'
   )
 
-  t.throws(
+  assert.throws(
     () => {
       // @ts-expect-error runtime.
       toNlcst({})
@@ -28,7 +28,7 @@ test('hast-util-to-nlcst', (t) => {
     'should fail when not given a tree (#2)'
   )
 
-  t.throws(
+  assert.throws(
     () => {
       // @ts-expect-error runtime.
       toNlcst({type: 'foo'})
@@ -37,7 +37,7 @@ test('hast-util-to-nlcst', (t) => {
     'should fail when not given a file'
   )
 
-  t.throws(
+  assert.throws(
     () => {
       // @ts-expect-error runtime.
       toNlcst({type: 'foo'})
@@ -46,7 +46,7 @@ test('hast-util-to-nlcst', (t) => {
     'should fail when not given a file (#2)'
   )
 
-  t.throws(
+  assert.throws(
     () => {
       // @ts-expect-error runtime.
       toNlcst({type: 'text', value: 'foo'}, {foo: 'bar'})
@@ -55,7 +55,7 @@ test('hast-util-to-nlcst', (t) => {
     'should fail when not given a file (#3)'
   )
 
-  t.throws(
+  assert.throws(
     () => {
       // @ts-expect-error runtime.
       toNlcst({type: 'text', value: 'foo'}, new VFile('foo'))
@@ -64,7 +64,7 @@ test('hast-util-to-nlcst', (t) => {
     'should fail without parser'
   )
 
-  t.throws(
+  assert.throws(
     () => {
       toNlcst({type: 'text', value: 'foo'}, new VFile(), ParseLatin)
     },
@@ -72,7 +72,7 @@ test('hast-util-to-nlcst', (t) => {
     'should fail when not given positional information'
   )
 
-  t.doesNotThrow(() => {
+  assert.doesNotThrow(() => {
     toNlcst(
       {
         type: 'text',
@@ -87,7 +87,7 @@ test('hast-util-to-nlcst', (t) => {
     )
   }, 'should accept a parser constructor')
 
-  t.doesNotThrow(() => {
+  assert.doesNotThrow(() => {
     toNlcst(
       {
         type: 'text',
@@ -102,7 +102,7 @@ test('hast-util-to-nlcst', (t) => {
     )
   }, 'should accept a parser instance')
 
-  t.throws(
+  assert.throws(
     () => {
       toNlcst(
         {
@@ -118,97 +118,83 @@ test('hast-util-to-nlcst', (t) => {
     /hast-util-to-nlcst expected position on nodes/,
     'should fail when not given positional information (#2)'
   )
-
-  t.test('should accept nodes without offsets', (t) => {
-    const node = toNlcst(
-      {
-        type: 'text',
-        value: 'foo',
-        position: {
-          start: {line: 1, column: 1},
-          end: {line: 1, column: 4}
-        }
-      },
-      new VFile('foo'),
-      ParseLatin
-    )
-
-    t.equal(
-      node.position && node.position.start.offset,
-      0,
-      'should set starting offset'
-    )
-    t.equal(
-      node.position && node.position.end.offset,
-      3,
-      'should set ending offset'
-    )
-
-    t.end()
-  })
-
-  t.test('should accept comments', (t) => {
-    const node = toNlcst(
-      {
-        type: 'comment',
-        value: 'a',
-        position: {start: {line: 1, column: 1}, end: {line: 1, column: 9}}
-      },
-      new VFile('<!--a-->'),
-      ParseLatin
-    )
-
-    t.deepEqual(
-      node,
-      {
-        type: 'RootNode',
-        children: [],
-        position: {
-          start: {line: 1, column: 1, offset: 0},
-          end: {line: 1, column: 9, offset: 8}
-        }
-      },
-      'should support comments'
-    )
-
-    t.end()
-  })
-
-  t.end()
 })
 
-test('Fixtures', (t) => {
-  const root = path.join('test', 'fixtures')
-  const files = fs.readdirSync(root)
+await test('should accept nodes without offsets', () => {
+  const node = toNlcst(
+    {
+      type: 'text',
+      value: 'foo',
+      position: {
+        start: {line: 1, column: 1},
+        end: {line: 1, column: 4}
+      }
+    },
+    new VFile('foo'),
+    ParseLatin
+  )
+
+  assert.equal(
+    node.position && node.position.start.offset,
+    0,
+    'should set starting offset'
+  )
+  assert.equal(
+    node.position && node.position.end.offset,
+    3,
+    'should set ending offset'
+  )
+})
+
+await test('should accept comments', () => {
+  const node = toNlcst(
+    {
+      type: 'comment',
+      value: 'a',
+      position: {start: {line: 1, column: 1}, end: {line: 1, column: 9}}
+    },
+    new VFile('<!--a-->'),
+    ParseLatin
+  )
+
+  assert.deepEqual(
+    node,
+    {
+      type: 'RootNode',
+      children: [],
+      position: {
+        start: {line: 1, column: 1, offset: 0},
+        end: {line: 1, column: 9, offset: 8}
+      }
+    },
+    'should support comments'
+  )
+})
+
+test('fixtures', async () => {
+  const root = new URL('fixtures/', import.meta.url)
+  const files = await fs.readdir(root)
   let index = -1
-  /** @type {string} */
-  let input
-  /** @type {string} */
-  let output
-  /** @type {import('vfile').VFile} */
-  let file
-  /** @type {import('unist').Node} */
-  let actual
-  /** @type {import('unist').Node} */
-  let expected
 
   while (++index < files.length) {
-    if (isHidden(files[index])) continue
+    const folder = files[index]
 
-    input = path.join(root, files[index], 'input.html')
-    output = path.join(root, files[index], 'output.json')
-    file = new VFile(fs.readFileSync(input))
-    actual = toNlcst(rehype().parse(file), file, ParseLatin)
+    if (isHidden(folder)) continue
+
+    const input = new URL(folder + '/input.html', root)
+    const output = new URL(folder + '/output.json', root)
+    const file = new VFile(await fs.readFile(input))
+    const actual = toNlcst(fromHtml(file), file, ParseLatin)
+    /** @type {import('unist').Node} */
+    let expected
 
     try {
-      expected = JSON.parse(String(fs.readFileSync(output)))
+      expected = JSON.parse(String(await fs.readFile(output)))
     } catch {
-      fs.writeFileSync(output, JSON.stringify(actual, null, 2) + '\n')
-      return
+      await fs.writeFile(output, JSON.stringify(actual, null, 2) + '\n')
+      continue
     }
 
-    t.deepEqual(actual, expected, 'should work on `' + files[index] + '`')
+    assert.deepEqual(actual, expected, 'should work on `' + files[index] + '`')
   }
-
-  t.end()
 })
