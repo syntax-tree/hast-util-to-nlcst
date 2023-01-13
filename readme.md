@@ -206,7 +206,7 @@ For example, [`parse-dutch`][parse-dutch], [`parse-english`][parse-english], or
 ###### Type
 
 ```ts
-type ParserInstance = type ParserInstance = {
+type ParserInstance = {
   tokenizeSentencePlugins: Array<(node: NlcstSentence) => void>
   tokenizeParagraphPlugins: Array<(node: NlcstParagraph) => void>
   parse(value: string | null | undefined): NlcstRoot
