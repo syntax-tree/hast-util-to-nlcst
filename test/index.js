@@ -2,16 +2,16 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 import test from 'node:test'
 import {fromHtml} from 'hast-util-from-html'
+import {toNlcst} from 'hast-util-to-nlcst'
 import {isHidden} from 'is-hidden'
 import {ParseDutch} from 'parse-dutch'
 import {ParseEnglish} from 'parse-english'
 import {ParseLatin} from 'parse-latin'
 import {VFile} from 'vfile'
-import {toNlcst} from '../index.js'
 
 test('toNlcst', async function (t) {
   await t.test('should expose the public api', async function () {
-    assert.deepEqual(Object.keys(await import('../index.js')).sort(), [
+    assert.deepEqual(Object.keys(await import('hast-util-to-nlcst')).sort(), [
       'toNlcst'
     ])
   })
