@@ -48,7 +48,7 @@ same at a higher-level (easier) abstraction.
 ## Install
 
 This package is [ESM only][esm].
-In Node.js (version 14.14+ and or 16.0+), install with [npm][]:
+In Node.js (version 16+), install with [npm][]:
 
 ```sh
 npm install hast-util-to-nlcst
@@ -57,14 +57,14 @@ npm install hast-util-to-nlcst
 In Deno with [`esm.sh`][esmsh]:
 
 ```js
-import {toNlcst} from "https://esm.sh/hast-util-to-nlcst@3"
+import {toNlcst} from 'https://esm.sh/hast-util-to-nlcst@3'
 ```
 
 In browsers with [`esm.sh`][esmsh]:
 
 ```html
 <script type="module">
-  import {toNlcst} from "https://esm.sh/hast-util-to-nlcst@3?bundle"
+  import {toNlcst} from 'https://esm.sh/hast-util-to-nlcst@3?bundle'
 </script>
 ```
 
@@ -83,11 +83,11 @@ Say our document `example.html` contains:
 …and our module `example.js` looks as follows:
 
 ```js
+import {fromHtml} from 'hast-util-from-html'
+import {toNlcst} from 'hast-util-to-nlcst'
+import {ParseEnglish} from 'parse-english'
 import {read} from 'to-vfile'
 import {inspect} from 'unist-util-inspect'
-import {toNlcst} from 'hast-util-to-nlcst'
-import {fromHtml} from 'hast-util-from-html'
-import {ParseEnglish} from 'parse-english'
 
 const file = await read('example.html')
 const tree = fromHtml(file)
@@ -121,7 +121,7 @@ RootNode[2] (1:1-6:1, 0-134)
 
 ## API
 
-This package exports the identifier [`toNlcst`][tonlcst].
+This package exports the identifier [`toNlcst`][api-to-nlcst].
 There is no default export.
 
 ### `toNlcst(tree, file, Parser)`
@@ -137,8 +137,8 @@ Turn a hast tree into an nlcst tree.
     — hast tree to transform
 *   `file` ([`VFile`][vfile])
     — virtual file
-*   `Parser` ([`ParserConstructor`][parserconstructor] or
-    [`ParserInstance`][parserinstance])
+*   `Parser` ([`ParserConstructor`][api-parser-constructor] or
+    [`ParserInstance`][api-parser-instance])
     — parser to use.
 
 ##### Returns
@@ -218,15 +218,18 @@ type ParserInstance = {
 ## Types
 
 This package is fully typed with [TypeScript][].
-It exports the additional types [`ParserConstructor`][parserconstructor] and
-[`ParserInstance`][parserinstance].
+It exports the additional types [`ParserConstructor`][api-parser-constructor]
+and [`ParserInstance`][api-parser-instance].
 
 ## Compatibility
 
-Projects maintained by the unified collective are compatible with all maintained
+Projects maintained by the unified collective are compatible with maintained
 versions of Node.js.
-As of now, that is Node.js 14.14+ and 16.0+.
-Our projects sometimes work with older versions, but this is not guaranteed.
+
+When we cut a new major release, we drop support for unmaintained versions of
+Node.
+This means we try to keep the current release line, `hast-util-to-nlcst@^3`,
+compatible with Node.js 12.
 
 ## Security
 
@@ -270,9 +273,9 @@ abide by its terms.
 
 [downloads]: https://www.npmjs.com/package/hast-util-to-nlcst
 
-[size-badge]: https://img.shields.io/bundlephobia/minzip/hast-util-to-nlcst.svg
+[size-badge]: https://img.shields.io/badge/dynamic/json?label=minzipped%20size&query=$.size.compressedSize&url=https://deno.bundlejs.com/?q=hast-util-to-nlcst
 
-[size]: https://bundlephobia.com/result?p=hast-util-to-nlcst
+[size]: https://bundlejs.com/?q=hast-util-to-nlcst
 
 [sponsors-badge]: https://opencollective.com/unified/sponsors/badge.svg
 
@@ -328,8 +331,8 @@ abide by its terms.
 
 [parse-dutch]: https://github.com/wooorm/parse-dutch
 
-[tonlcst]: #tonlcsttree-file-parser
+[api-to-nlcst]: #tonlcsttree-file-parser
 
-[parserconstructor]: #parserconstructor
+[api-parser-constructor]: #parserconstructor
 
-[parserinstance]: #parserinstance
+[api-parser-instance]: #parserinstance
