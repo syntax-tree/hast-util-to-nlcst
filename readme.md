@@ -207,11 +207,11 @@ For example, [`parse-dutch`][parse-dutch], [`parse-english`][parse-english], or
 
 ```ts
 type ParserInstance = {
-  tokenizeSentencePlugins: Array<(node: NlcstSentence) => void>
-  tokenizeParagraphPlugins: Array<(node: NlcstParagraph) => void>
-  parse(value: string | null | undefined): NlcstRoot
-  tokenizeParagraph(value: string | null | undefined): NlcstParagraph
-  tokenize(value: string | null | undefined): Array<NlcstSentenceContent>
+  parse(value?: string | null | undefined): NlcstRoot
+  tokenize(value?: string | null | undefined): Array<NlcstSentenceContent>
+  tokenizeParagraph(value?: string | null | undefined): NlcstParagraph
+  tokenizeParagraphPlugins: Array<(node: NlcstParagraph) => undefined | void>
+  tokenizeSentencePlugins: Array<(node: NlcstSentence) => undefined | void>
 }
 ```
 
