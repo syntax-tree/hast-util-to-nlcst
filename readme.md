@@ -57,14 +57,14 @@ npm install hast-util-to-nlcst
 In Deno with [`esm.sh`][esmsh]:
 
 ```js
-import {toNlcst} from 'https://esm.sh/hast-util-to-nlcst@3'
+import {toNlcst} from 'https://esm.sh/hast-util-to-nlcst@4'
 ```
 
 In browsers with [`esm.sh`][esmsh]:
 
 ```html
 <script type="module">
-  import {toNlcst} from 'https://esm.sh/hast-util-to-nlcst@3?bundle'
+  import {toNlcst} from 'https://esm.sh/hast-util-to-nlcst@4?bundle'
 </script>
 ```
 
